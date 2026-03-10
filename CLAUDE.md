@@ -4,6 +4,44 @@
 
 ---
 
+## 🚀 Quick Start (Claude Code 세션)
+
+**세션 시작 시 반드시 읽어야 할 파일:**
+
+```
+1. PLAN.md      → 무슨 일을 해야 하는지 (할 일 목록)
+2. PROGRESS.md  → 어디까지 진행되었는지 (완료된 작업)
+```
+
+### 현재 상태 (2026-03-10)
+
+- ✅ Phase 1.1 완료: 프로젝트 초기화
+- 🟡 Phase 1.2 진행 중: Message Protocol 구현 필요
+- 📦 테스트 7개 통과, Clippy 통과
+
+### 다음 작업
+
+1. `src/protocol/message.rs` - LlmMessage 구조체 구현
+2. `src/protocol/agent.rs` - AgentId 구조체 구현
+3. `src/adapters/claude.rs` - Claude API adapter
+
+### 빌드 & 테스트
+
+```bash
+cargo build              # 빌드
+cargo test               # 테스트
+cargo clippy             # 린트
+cargo run -- --help      # CLI 확인
+```
+
+### Git Commit Rules
+
+- 작성자: Mario Cho (hephaex@gmail.com) 단독
+- Co-Authored-By 추가 금지
+- AI 생성 표시 문구 추가 금지
+
+---
+
 ## Project Vision
 
 Axon은 여러 LLM 에이전트가 서로 대화하고, 협력하며, 도구를 공유할 수 있는 **CLI 기반 LLM 오케스트레이션 프레임워크**입니다.

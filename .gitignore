@@ -27,3 +27,8 @@ logs/
 
 # Local config
 config.local.toml
+
+# Claude Code state (not committed)
+.claude/state/
+.claude/locks/
+.claude/logs/

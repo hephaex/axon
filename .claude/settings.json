@@ -1,0 +1,17 @@
+{
+  "project": {
+    "name": "axon",
+    "description": "LLM-to-LLM Communication Framework"
+  },
+  "build": {
+    "command": "cargo build",
+    "test": "cargo test",
+    "lint": "cargo clippy -- -D warnings"
+  },
+  "git": {
+    "attribution": {
+      "commit": "",
+      "pr": ""
+    }
+  }
+}
