@@ -6,10 +6,10 @@
 
 ## Phase 1: Core Protocol & CLI (MVP)
 
-### 1.1 프로젝트 초기화
-- [ ] Cargo.toml 설정 (clap, tokio, serde, reqwest)
-- [ ] 기본 디렉토리 구조 생성
-- [ ] Error types 정의
+### 1.1 프로젝트 초기화 ✅
+- [x] Cargo.toml 설정 (clap, tokio, serde, reqwest)
+- [x] 기본 디렉토리 구조 생성
+- [x] Error types 정의
 
 ### 1.2 Message Protocol
 - [ ] `LlmMessage` 구조체
@@ -17,10 +17,11 @@
 - [ ] `AgentId` 구조체
 - [ ] Serialization 테스트
 
-### 1.3 CLI 기본 구조
-- [ ] `axon serve` - 라우터 서버 시작
-- [ ] `axon send` - 단일 메시지 전송
-- [ ] `axon agent add/list/remove` - 에이전트 관리
+### 1.3 CLI 기본 구조 (스켈레톤 완료)
+- [x] `axon serve` - 라우터 서버 시작 (스켈레톤)
+- [x] `axon send` - 단일 메시지 전송 (스켈레톤)
+- [x] `axon agent add/list/remove` - 에이전트 관리 (스켈레톤)
+- [ ] 실제 기능 구현
 
 ### 1.4 Claude Adapter
 - [ ] Anthropic API 클라이언트

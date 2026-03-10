@@ -15,14 +15,17 @@
 
 ### 2026-03-10
 
-#### 프로젝트 초기화
+#### 프로젝트 초기화 ✅
 - [x] 프로젝트 디렉토리 생성 (`../axon/`)
 - [x] CLAUDE.md 작성 (프로젝트 가이드)
 - [x] PLAN.md 작성 (개발 계획)
 - [x] PROGRESS.md 작성 (진행 상황)
-- [x] Cargo.toml 생성
-- [x] 기본 디렉토리 구조 생성
-- [x] Error types 정의
+- [x] Cargo.toml 생성 (clap, tokio, serde, reqwest 등)
+- [x] 기본 디렉토리 구조 생성 (cli, protocol, router, adapters, tools, config)
+- [x] Error types 정의 (`src/error.rs`)
+- [x] Config 시스템 구현 (`src/config/mod.rs`)
+- [x] CLI 기본 구조 구현 (serve, send, converse, pipe, agent, tool)
+- [x] Git 초기화 및 첫 커밋
 
 ---
 
