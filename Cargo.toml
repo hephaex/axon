@@ -1,0 +1,62 @@
+[package]
+name = "axon"
+version = "0.1.0"
+edition = "2021"
+authors = ["Mario Cho <hephaex@gmail.com>"]
+description = "LLM-to-LLM Communication Framework"
+license = "MIT"
+repository = "https://github.com/hephaex/axon"
+keywords = ["llm", "ai", "cli", "multi-agent"]
+categories = ["command-line-utilities", "development-tools"]
+
+[dependencies]
+# CLI
+clap = { version = "4", features = ["derive"] }
+
+# Async runtime
+tokio = { version = "1", features = ["full"] }
+
+# HTTP client
+reqwest = { version = "0.12", features = ["json"] }
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# Configuration
+toml = "0.8"
+
+# UUID
+uuid = { version = "1", features = ["v4", "serde"] }
+
+# Date/time
+chrono = { version = "0.4", features = ["serde"] }
+
+# Error handling
+thiserror = "2"
+anyhow = "1"
+
+# Async traits
+async-trait = "0.1"
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# Environment
+dotenvy = "0.15"
+
+# Secrets
+secrecy = { version = "0.10", features = ["serde"] }
+
+# Directories
+dirs = "6"
+
+[dev-dependencies]
+tokio-test = "0.4"
+pretty_assertions = "1"
+mockito = "1"
+
+[[bin]]
+name = "axon"
+path = "src/main.rs"
