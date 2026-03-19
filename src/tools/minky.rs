@@ -49,7 +49,7 @@ impl MinkyConfig {
 }
 
 /// MinKy search modes
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum SearchMode {
     /// Keyword-based search
@@ -57,15 +57,10 @@ pub enum SearchMode {
     /// Vector similarity search
     Vector,
     /// Hybrid (keyword + vector)
+    #[default]
     Hybrid,
     /// Deep semantic search with AI
     Deep,
-}
-
-impl Default for SearchMode {
-    fn default() -> Self {
-        Self::Hybrid
-    }
 }
 
 /// Search result from MinKy

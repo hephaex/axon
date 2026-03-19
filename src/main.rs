@@ -5,6 +5,8 @@
 use axon::adapters::{ClaudeAdapter, LlmAdapter};
 use axon::protocol::{AgentConfig, Conversation, LlmMessage, Provider, TurnPolicy};
 use axon::router::MessageRouter;
+use axon::tools::{MinkyConfig, ToolRegistry};
+use axon::tools::minky::register_minky_tools;
 use clap::{Parser, Subcommand};
 use std::io::{self, Read as IoRead};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
@@ -412,16 +414,53 @@ async fn main() -> anyhow::Result<()> {
         Commands::Tool { action } => match action {
             ToolAction::Add { name, endpoint } => {
                 tracing::info!("Adding tool: {}", name);
-                println!("Adding tool '{}' at {}", name, endpoint);
-                println!("(Not yet implemented)");
+
+                // Create registry and add the tool
+                let registry = ToolRegistry::new();
+
+                match name.as_str() {
+                    "minky" => {
+                        let config = MinkyConfig::new(&endpoint);
+                        if let Err(e) = register_minky_tools(&registry, config).await {
+                            eprintln!("Error adding MinKy tools: {}", e);
+                            std::process::exit(1);
+                        }
+                        println!("Added MinKy tools (endpoint: {})", endpoint);
+                        println!("  - minky_search: Search knowledge base");
+                        println!("  - minky_ask: RAG question answering");
+                        println!("  - minky_get: Get document by ID");
+                    }
+                    _ => {
+                        println!("Adding custom tool '{}' at {}", name, endpoint);
+                        println!("Note: Custom tools require MCP server at the endpoint");
+                        println!("(MCP integration not yet implemented)");
+                    }
+                }
             }
             ToolAction::List => {
-                println!("Registered tools:");
-                println!("  (No tools registered yet)");
+                println!("Available Tools:\n");
+
+                println!("Built-in Tools:");
+                println!("  read_file     - Read file contents");
+                println!("  write_file    - Write to a file (requires --allow-write)");
+                println!("  list_dir      - List directory contents");
+                println!("  web_fetch     - Fetch content from URL");
+                println!();
+
+                println!("MinKy Tools (requires --minky-endpoint):");
+                println!("  minky_search  - Search knowledge base");
+                println!("  minky_ask     - RAG question answering");
+                println!("  minky_get     - Get document by ID");
+                println!();
+
+                println!("Usage:");
+                println!("  axon converse --tools read_file,web_fetch ...");
+                println!("  axon tool add minky --endpoint http://localhost:3000/api");
             }
             ToolAction::Remove { name } => {
                 println!("Removing tool: {}", name);
-                println!("(Not yet implemented)");
+                println!("Note: Built-in tools cannot be removed.");
+                println!("To disable tools, simply don't include them in --tools option.");
             }
         },
     }
