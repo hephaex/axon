@@ -3,7 +3,8 @@
 //! Entry point for the axon command-line interface.
 
 use axon::adapters::{ClaudeAdapter, LlmAdapter};
-use axon::protocol::{AgentConfig, LlmMessage, Provider};
+use axon::protocol::{AgentConfig, Conversation, LlmMessage, Provider, TurnPolicy};
+use axon::router::MessageRouter;
 use clap::{Parser, Subcommand};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 use uuid::Uuid;
@@ -203,12 +204,99 @@ async fn main() -> anyhow::Result<()> {
 
         Commands::Converse { agents, topic, max_turns } => {
             tracing::info!("Starting conversation with agents: {}", agents);
-            // TODO: Implement converse command
-            println!("Starting conversation:");
-            println!("  Agents: {}", agents);
-            println!("  Topic: {}", topic);
-            println!("  Max turns: {}", max_turns);
-            println!("(Not yet implemented)");
+
+            // Parse agent list
+            let agent_list: Vec<&str> = agents.split(',').map(|s| s.trim()).collect();
+            if agent_list.len() < 2 {
+                eprintln!("Error: At least 2 agents required for conversation");
+                std::process::exit(1);
+            }
+
+            // Create router and register adapters
+            let router = MessageRouter::new();
+
+            for agent_name in &agent_list {
+                let config = AgentConfig::new(
+                    *agent_name,
+                    Provider::Anthropic,
+                    "claude-sonnet-4-20250514",
+                );
+
+                match ClaudeAdapter::new(config) {
+                    Ok(adapter) => {
+                        router.register_adapter(Box::new(adapter)).await;
+                    }
+                    Err(e) => {
+                        eprintln!("Error creating adapter for {}: {}", agent_name, e);
+                        eprintln!("Hint: Set ANTHROPIC_API_KEY environment variable");
+                        std::process::exit(1);
+                    }
+                }
+            }
+
+            // Create conversation
+            let mut conversation = Conversation::new(
+                agent_list.iter().map(|s| (*s).into()).collect()
+            )
+            .with_topic(&topic)
+            .with_turn_policy(TurnPolicy::RoundRobin)
+            .with_max_turns(max_turns);
+
+            println!("=== Conversation: {} ===\n", topic);
+
+            // Start with the topic as initial context
+            let initial_message = LlmMessage::chat(
+                "user",
+                Some(agent_list[0].into()),
+                format!("Let's discuss: {}. Start the conversation.", topic),
+                conversation.id,
+            );
+
+            // First turn
+            match router.send(initial_message.clone()).await {
+                Ok(response) => {
+                    println!("[{}]: {}\n", response.from.as_str(), response.content.as_text());
+                    conversation.add_message(response.clone());
+
+                    // Continue conversation loop
+                    let mut current_message = response;
+
+                    while conversation.is_active() && conversation.current_turn < max_turns {
+                        // Get next speaker
+                        let next_speaker = match conversation.get_next_speaker() {
+                            Some(speaker) => speaker.clone(),
+                            None => break,
+                        };
+
+                        // Create message from last response to next speaker
+                        let msg = LlmMessage::chat(
+                            current_message.from.as_str(),
+                            Some(next_speaker.clone()),
+                            current_message.content.as_text(),
+                            conversation.id,
+                        );
+
+                        // Update conversation and get response
+                        match router.send(msg).await {
+                            Ok(response) => {
+                                println!("[{}]: {}\n", response.from.as_str(), response.content.as_text());
+                                conversation.add_message(response.clone());
+                                current_message = response;
+                            }
+                            Err(e) => {
+                                eprintln!("Error: {}", e);
+                                break;
+                            }
+                        }
+                    }
+
+                    println!("=== Conversation ended after {} turns ===", conversation.current_turn);
+                }
+                Err(e) => {
+                    eprintln!("Error starting conversation: {}", e);
+                    std::process::exit(1);
+                }
+            }
         }
 
         Commands::Pipe { chain } => {
