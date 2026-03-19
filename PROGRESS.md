@@ -6,8 +6,8 @@
 
 ## 현재 상태
 
-**Phase**: 3 완료, Phase 4 시작 예정
-**상태**: 🟢 Phase 3 완료
+**Phase**: 4 완료, Phase 5 시작 예정
+**상태**: 🟢 Phase 4 완료
 
 ---
 
@@ -85,25 +85,51 @@
 - [x] MinKy Adapter (minky_search, minky_ask, minky_get)
 - [x] `axon tool add/list/remove` CLI 구현
 
+#### Phase 4: Additional Adapters ✅
+- [x] GeminiAdapter (Google AI API)
+  - Function calling, System instruction 지원
+- [x] OpenAiAdapter (GPT API)
+  - Tool use, Custom endpoint 지원 (Azure 호환)
+- [x] OllamaAdapter (Local)
+  - 로컬 Ollama 연동, 이미지 지원
+- [x] AdapterBuilder 모든 Provider 지원
+- [x] 76개 테스트 통과
+
 ---
 
 ## 진행 중인 작업
 
-### Phase 4: Additional Adapters (예정)
-- [ ] Gemini Adapter (Google AI API)
-- [ ] OpenAI Adapter (GPT API)
-- [ ] Ollama Adapter (Local)
+### Phase 5: Advanced Features (예정)
+- [ ] Streaming responses
+- [ ] Conversation persistence
+- [ ] WebSocket server mode
 
 ---
 
 ## 다음 작업
 
-1. Phase 4: Additional LLM Adapters (Gemini, OpenAI, Ollama)
-2. Phase 5: Advanced Features (Streaming, Persistence)
+1. Phase 5: Advanced Features
+   - Streaming responses 지원
+   - Conversation persistence
+   - WebSocket server mode
+2. Phase 5.4: Reliability
+   - Rate limiting
+   - Retry with backoff
 
 ---
 
 ## 세션 로그
+
+### 2026-03-19 Session 6
+- Phase 4 완료: Additional LLM Adapters
+- GeminiAdapter 구현 (Google AI API)
+  - Function calling, System instruction
+- OpenAiAdapter 구현 (GPT API)
+  - Tool use, Custom endpoint (Azure 호환)
+- OllamaAdapter 구현 (Local LLM)
+  - 로컬 연동, 이미지 지원, 긴 타임아웃
+- AdapterBuilder 업데이트 (모든 Provider 지원)
+- 76개 테스트 통과
 
 ### 2026-03-19 Session 5
 - Phase 3 완전 완료

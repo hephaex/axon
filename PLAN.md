@@ -79,19 +79,22 @@
 
 ---
 
-## Phase 4: Additional Adapters
+## Phase 4: Additional Adapters ✅
 
-### 4.1 Gemini Adapter
-- [ ] Google AI API 클라이언트
-- [ ] Function calling 지원
+### 4.1 Gemini Adapter ✅
+- [x] Google AI API 클라이언트
+- [x] Function calling 지원
+- [x] System instruction 지원
 
-### 4.2 OpenAI Adapter
-- [ ] GPT API 클라이언트
-- [ ] Tool use 지원
+### 4.2 OpenAI Adapter ✅
+- [x] GPT API 클라이언트
+- [x] Tool use 지원
+- [x] Custom endpoint 지원 (Azure 호환)
 
-### 4.3 Ollama Adapter (Local)
-- [ ] 로컬 Ollama 연동
-- [ ] 오프라인 사용 지원
+### 4.3 Ollama Adapter (Local) ✅
+- [x] 로컬 Ollama 연동
+- [x] 오프라인 사용 지원
+- [x] 이미지 지원 (multimodal)
 
 ---
 
