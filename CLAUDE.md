@@ -13,17 +13,18 @@
 2. PROGRESS.md  → 어디까지 진행되었는지 (완료된 작업)
 ```
 
-### 현재 상태 (2026-03-10)
+### 현재 상태 (2026-03-19)
 
 - ✅ Phase 1.1 완료: 프로젝트 초기화
-- 🟡 Phase 1.2 진행 중: Message Protocol 구현 필요
-- 📦 테스트 7개 통과, Clippy 통과
+- ✅ Phase 1.2 완료: Message Protocol
+- 🟡 Phase 1.4 진행 예정: Claude Adapter
+- 📦 테스트 21개 통과, Clippy 통과
 
 ### 다음 작업
 
-1. `src/protocol/message.rs` - LlmMessage 구조체 구현
-2. `src/protocol/agent.rs` - AgentId 구조체 구현
-3. `src/adapters/claude.rs` - Claude API adapter
+1. `src/adapters/claude.rs` - Claude API adapter
+2. LlmAdapter trait에 LlmMessage 적용
+3. `axon send` 실제 기능 구현
 
 ### 빌드 & 테스트
 

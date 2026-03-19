@@ -11,11 +11,11 @@
 - [x] 기본 디렉토리 구조 생성
 - [x] Error types 정의
 
-### 1.2 Message Protocol
-- [ ] `LlmMessage` 구조체
-- [ ] `MessageType` enum (Chat, ToolCall, ToolResult, Delegate, Complete, Error)
-- [ ] `AgentId` 구조체
-- [ ] Serialization 테스트
+### 1.2 Message Protocol ✅
+- [x] `LlmMessage` 구조체
+- [x] `MessageType` enum (Chat, ToolCall, ToolResult, Delegate, Complete, Error)
+- [x] `AgentId` 구조체
+- [x] Serialization 테스트 (14개 테스트)
 
 ### 1.3 CLI 기본 구조 (스켈레톤 완료)
 - [x] `axon serve` - 라우터 서버 시작 (스켈레톤)
