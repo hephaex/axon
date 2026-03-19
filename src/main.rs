@@ -6,6 +6,7 @@ use axon::adapters::{ClaudeAdapter, LlmAdapter};
 use axon::protocol::{AgentConfig, Conversation, LlmMessage, Provider, TurnPolicy};
 use axon::router::MessageRouter;
 use clap::{Parser, Subcommand};
+use std::io::{self, Read as IoRead};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 use uuid::Uuid;
 
@@ -301,9 +302,92 @@ async fn main() -> anyhow::Result<()> {
 
         Commands::Pipe { chain } => {
             tracing::info!("Piping through chain: {}", chain);
-            // TODO: Implement pipe command
-            println!("Pipeline: {}", chain);
-            println!("(Not yet implemented)");
+
+            // Read input from stdin
+            let mut input = String::new();
+            if let Err(e) = io::stdin().read_to_string(&mut input) {
+                eprintln!("Error reading stdin: {}", e);
+                std::process::exit(1);
+            }
+
+            if input.trim().is_empty() {
+                eprintln!("Error: No input provided. Pipe content to stdin.");
+                eprintln!("Usage: cat file.txt | axon pipe --chain \"claude:review\"");
+                std::process::exit(1);
+            }
+
+            // Parse chain: "claude:review -> gemini:security"
+            let stages: Vec<(&str, Option<&str>)> = chain
+                .split("->")
+                .map(|s| s.trim())
+                .map(|s| {
+                    if let Some((agent, task)) = s.split_once(':') {
+                        (agent.trim(), Some(task.trim()))
+                    } else {
+                        (s, None)
+                    }
+                })
+                .collect();
+
+            if stages.is_empty() {
+                eprintln!("Error: No agents specified in chain");
+                std::process::exit(1);
+            }
+
+            // Create conversation ID
+            let conv_id = Uuid::new_v4();
+            let mut current_content = input.trim().to_string();
+
+            // Process through each stage
+            for (i, (agent_name, task)) in stages.iter().enumerate() {
+                let stage_num = i + 1;
+                let total_stages = stages.len();
+
+                if cli.verbose {
+                    eprintln!("[{}/{}] Processing with {}...", stage_num, total_stages, agent_name);
+                }
+
+                // Create adapter
+                let config = AgentConfig::new(
+                    *agent_name,
+                    Provider::Anthropic,
+                    "claude-sonnet-4-20250514",
+                );
+
+                let adapter: ClaudeAdapter = match ClaudeAdapter::new(config) {
+                    Ok(a) => a,
+                    Err(e) => {
+                        eprintln!("Error creating adapter for {}: {}", agent_name, e);
+                        eprintln!("Hint: Set ANTHROPIC_API_KEY environment variable");
+                        std::process::exit(1);
+                    }
+                };
+
+                // Build prompt with task context
+                let prompt = match task {
+                    Some(t) => format!(
+                        "Task: {}\n\nInput:\n{}\n\nProvide your response:",
+                        t, current_content
+                    ),
+                    None => current_content.clone(),
+                };
+
+                // Create and send message
+                let message = LlmMessage::chat("user", Some((*agent_name).into()), prompt, conv_id);
+
+                match adapter.process(&message).await {
+                    Ok(response) => {
+                        current_content = response.content.as_text().to_string();
+                    }
+                    Err(e) => {
+                        eprintln!("Error from {}: {}", agent_name, e);
+                        std::process::exit(1);
+                    }
+                }
+            }
+
+            // Output final result
+            println!("{}", current_content);
         }
 
         Commands::Agent { action } => match action {
