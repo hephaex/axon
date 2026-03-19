@@ -144,7 +144,14 @@
 1. ~~Shell command 도구 구현 (Phase 3.3)~~ ✅ 완료
 2. ~~`--tools` 옵션으로 대화에 도구 연결 (Phase 3.4)~~ ✅ 완료
 3. ~~CLI 스트리밍 출력 (`axon send --stream` 옵션)~~ ✅ 완료
-4. 프로덕션 배포 준비 (Docker, 설정 파일)
+4. ~~프로덕션 배포 준비 (Docker, 설정 파일)~~ ✅ 완료
+
+## 추가 작업 (Future)
+
+1. Kubernetes 배포 (Helm chart)
+2. Prometheus metrics 연동
+3. OpenTelemetry tracing
+4. Agent 자동 등록 (config.toml 기반)
 
 ---
 

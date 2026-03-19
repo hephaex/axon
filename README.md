@@ -2,6 +2,7 @@
 
 [![CI](https://github.com/hephaex/axon/actions/workflows/ci.yml/badge.svg)](https://github.com/hephaex/axon/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://github.com/hephaex/axon)
 
 > LLM-to-LLM Communication Framework
 
@@ -184,6 +185,78 @@ export GOOGLE_API_KEY="..."
 
 # Ollama (local, no key needed)
 ollama serve  # Start Ollama first
+```
+
+### Configuration File
+
+Create `~/.axon/config.toml` or `./axon.toml`:
+
+```toml
+[server]
+port = 8090
+host = "127.0.0.1"
+log_level = "info"
+
+[agents.claude]
+provider = "anthropic"
+model = "claude-sonnet-4-20250514"
+api_key_env = "ANTHROPIC_API_KEY"
+
+[agents.llama]
+provider = "ollama"
+model = "llama3.2"
+endpoint = "http://localhost:11434"
+```
+
+See `axon.example.toml` for more options.
+
+## Docker Deployment
+
+### Quick Start with Docker
+
+```bash
+# Build image
+docker build -t axon .
+
+# Run with API key
+docker run -d \
+  -p 8090:8090 \
+  -e ANTHROPIC_API_KEY="your-key" \
+  --name axon \
+  axon
+
+# Check health
+curl http://localhost:8090/health
+```
+
+### Docker Compose
+
+```bash
+# Copy environment file
+cp .env.example .env
+# Edit .env with your API keys
+
+# Start Axon server
+docker compose up -d
+
+# Start with local Ollama
+docker compose --profile with-ollama up -d
+
+# View logs
+docker compose logs -f axon
+
+# Stop
+docker compose down
+```
+
+### Docker Compose with Custom Config
+
+```bash
+# Create config file
+cp axon.example.toml axon.toml
+
+# Start with mounted config
+docker compose up -d
 ```
 
 ## Development

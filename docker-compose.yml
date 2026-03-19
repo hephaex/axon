@@ -1,0 +1,65 @@
+# Axon - Docker Compose Configuration
+# Usage: docker compose up -d
+
+services:
+  # Main Axon server
+  axon:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: axon-server
+    restart: unless-stopped
+    ports:
+      - "${AXON_PORT:-8090}:8090"
+    environment:
+      # API Keys (set in .env file or environment)
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY:-}
+      # Server configuration
+      - RUST_LOG=${RUST_LOG:-axon=info}
+    volumes:
+      # Mount config file (optional)
+      - ./axon.toml:/home/axon/.axon/config.toml:ro
+      # Persist conversation data (optional)
+      - axon-data:/home/axon/.axon/data
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8090/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    networks:
+      - axon-network
+
+  # Optional: Ollama for local LLM
+  ollama:
+    image: ollama/ollama:latest
+    container_name: axon-ollama
+    restart: unless-stopped
+    ports:
+      - "${OLLAMA_PORT:-11434}:11434"
+    volumes:
+      - ollama-models:/root/.ollama
+    networks:
+      - axon-network
+    profiles:
+      - with-ollama
+    # GPU support (uncomment for NVIDIA)
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
+
+volumes:
+  axon-data:
+    driver: local
+  ollama-models:
+    driver: local
+
+networks:
+  axon-network:
+    driver: bridge

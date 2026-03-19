@@ -1,0 +1,63 @@
+# Axon Configuration File
+# Copy this file to ~/.axon/config.toml or ./axon.toml
+
+# ============================================
+# Server Configuration
+# ============================================
+[server]
+# Port to listen on
+port = 8090
+
+# Host to bind to (use 0.0.0.0 for Docker)
+host = "127.0.0.1"
+
+# Log level: trace, debug, info, warn, error
+log_level = "info"
+
+# ============================================
+# Agent Configurations
+# ============================================
+
+# Claude (Anthropic)
+[agents.claude]
+provider = "anthropic"
+model = "claude-sonnet-4-20250514"
+api_key_env = "ANTHROPIC_API_KEY"
+
+# GPT-4 (OpenAI)
+[agents.gpt]
+provider = "openai"
+model = "gpt-4o"
+api_key_env = "OPENAI_API_KEY"
+
+# Gemini (Google)
+[agents.gemini]
+provider = "google"
+model = "gemini-1.5-pro"
+api_key_env = "GOOGLE_API_KEY"
+
+# Ollama (Local)
+[agents.llama]
+provider = "ollama"
+model = "llama3.2"
+endpoint = "http://localhost:11434"
+
+# Ollama in Docker Compose
+[agents.llama-docker]
+provider = "ollama"
+model = "llama3.2"
+endpoint = "http://ollama:11434"
+
+# ============================================
+# Tool Configurations
+# ============================================
+
+# MinKy Knowledge Base
+[tools.minky]
+endpoint = "http://localhost:3000/api"
+# api_key_env = "MINKY_API_KEY"
+
+# Custom tool endpoint
+# [tools.custom]
+# endpoint = "http://localhost:5000/tools"
+# api_key_env = "CUSTOM_API_KEY"

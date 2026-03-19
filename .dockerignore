@@ -1,0 +1,51 @@
+# Build artifacts
+target/
+debug/
+release/
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Documentation
+*.md
+!README.md
+docs/
+
+# Test files
+tests/
+*.test.rs
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+
+# Local config
+.env
+.env.*
+*.local.toml
+
+# Logs
+*.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Rust
+Cargo.lock
+rustfmt.toml
+.cargo/
+
+# Docker (avoid recursion)
+Dockerfile*
+docker-compose*.yml
+.dockerignore
