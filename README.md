@@ -1,0 +1,183 @@
+# Axon
+
+> LLM-to-LLM Communication Framework
+
+Axon enables multiple LLM agents to communicate, collaborate, and orchestrate complex workflows. Built in Rust for performance and reliability.
+
+## Features
+
+- **Multi-Provider Support** - Claude, GPT, Gemini, Ollama (local)
+- **Multi-Agent Conversations** - RoundRobin, Directed, Free turn policies
+- **Streaming Responses** - Real-time SSE/WebSocket streaming
+- **Tool Integration** - Built-in tools + MCP-compatible extensions
+- **Pipeline Mode** - Chain agents for sequential processing
+- **HTTP API & WebSocket** - Server mode for integration
+- **Persistence** - Save/load conversations
+- **Reliability** - Retry, rate limiting, exponential backoff
+
+## Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/hephaex/axon.git
+cd axon
+
+# Build
+cargo build --release
+
+# Install globally (optional)
+cargo install --path .
+```
+
+## Quick Start
+
+### Send a Message
+
+```bash
+# Set your API key
+export ANTHROPIC_API_KEY="your-key"
+
+# Send a single message
+axon send --from user --to claude "Explain quantum computing in simple terms"
+```
+
+### Multi-Agent Conversation
+
+```bash
+# Start a conversation between agents
+axon converse --agents "analyst,critic" --topic "Pros and cons of microservices" --max-turns 6
+```
+
+### Pipeline Mode
+
+```bash
+# Chain agents for sequential processing
+cat code.rs | axon pipe --chain "claude:review -> claude:security"
+
+# With task descriptions
+echo "Build a REST API" | axon pipe --chain "architect:design -> developer:implement"
+```
+
+### Server Mode
+
+```bash
+# Start the HTTP/WebSocket server
+axon serve --port 8090
+
+# Health check
+curl http://localhost:8090/health
+
+# Send message via API
+curl -X POST http://localhost:8090/api/send \
+  -H "Content-Type: application/json" \
+  -d '{"from": "user", "to": "claude", "content": "Hello!"}'
+```
+
+## CLI Commands
+
+| Command | Description |
+|---------|-------------|
+| `axon send` | Send a single message to an agent |
+| `axon converse` | Start multi-agent conversation |
+| `axon pipe` | Pipeline mode (stdin → agents → stdout) |
+| `axon serve` | Start HTTP/WebSocket server |
+| `axon agent add/list/remove` | Manage agents |
+| `axon tool add/list/remove` | Manage tools |
+
+## API Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/health` | GET | Health check |
+| `/api/send` | POST | Send message to agent |
+| `/api/agents` | GET | List registered agents |
+| `/api/agents` | POST | Register new agent |
+| `/api/agents/:id` | DELETE | Remove agent |
+| `/api/stats` | GET | Router statistics |
+| `/ws` | GET | WebSocket for streaming |
+
+### WebSocket Protocol
+
+```json
+// Request
+{"type": "send_stream", "from": "user", "to": "claude", "content": "Hello"}
+
+// Response (streaming)
+{"type": "chunk", "conversation_id": "...", "delta": "Hello", "is_final": false}
+{"type": "complete", "conversation_id": "...", "content": "Hello! How can I help?"}
+```
+
+## Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                         CLI / API                            │
+├─────────────────────────────────────────────────────────────┤
+│                      Message Router                          │
+│  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐        │
+│  │ Claude  │  │  GPT    │  │ Gemini  │  │ Ollama  │        │
+│  │ Adapter │  │ Adapter │  │ Adapter │  │ Adapter │        │
+│  └─────────┘  └─────────┘  └─────────┘  └─────────┘        │
+├─────────────────────────────────────────────────────────────┤
+│                     Tool Registry                            │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐    │
+│  │ read_file│  │web_fetch │  │  minky   │  │  custom  │    │
+│  └──────────┘  └──────────┘  └──────────┘  └──────────┘    │
+├─────────────────────────────────────────────────────────────┤
+│              Persistence / Streaming / Reliability           │
+└─────────────────────────────────────────────────────────────┘
+```
+
+## Supported Providers
+
+| Provider | Environment Variable | Models |
+|----------|---------------------|--------|
+| Anthropic | `ANTHROPIC_API_KEY` | claude-sonnet-4-20250514, etc. |
+| OpenAI | `OPENAI_API_KEY` | gpt-4o, gpt-4-turbo, etc. |
+| Google | `GOOGLE_API_KEY` | gemini-pro, gemini-1.5-pro, etc. |
+| Ollama | (none - local) | llama3, mistral, etc. |
+
+## Built-in Tools
+
+| Tool | Description |
+|------|-------------|
+| `read_file` | Read file contents |
+| `write_file` | Write to a file |
+| `list_dir` | List directory contents |
+| `web_fetch` | Fetch content from URL |
+| `minky_search` | Search MinKy knowledge base |
+| `minky_ask` | RAG question answering |
+
+## Configuration
+
+```bash
+# Environment variables
+export ANTHROPIC_API_KEY="sk-ant-..."
+export OPENAI_API_KEY="sk-..."
+export GOOGLE_API_KEY="..."
+
+# Ollama (local, no key needed)
+ollama serve  # Start Ollama first
+```
+
+## Development
+
+```bash
+# Run tests
+cargo test
+
+# Run with verbose logging
+RUST_LOG=axon=debug axon send --from user "Hello"
+
+# Check code
+cargo clippy
+cargo fmt
+```
+
+## License
+
+MIT
+
+## Author
+
+Mario Cho ([@hephaex](https://github.com/hephaex))
