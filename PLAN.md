@@ -23,11 +23,11 @@
 - [x] `axon agent add/list/remove` - 에이전트 관리 (스켈레톤)
 - [ ] 실제 기능 구현
 
-### 1.4 Claude Adapter
-- [ ] Anthropic API 클라이언트
-- [ ] Message 변환 (LlmMessage ↔ Anthropic format)
-- [ ] Tool calling 지원
-- [ ] 기본 테스트
+### 1.4 Claude Adapter ✅
+- [x] Anthropic API 클라이언트
+- [x] Message 변환 (LlmMessage ↔ Anthropic format)
+- [x] Tool calling 지원
+- [x] 기본 테스트 (5개)
 
 ---
 

@@ -17,13 +17,14 @@
 
 - ✅ Phase 1.1 완료: 프로젝트 초기화
 - ✅ Phase 1.2 완료: Message Protocol
-- 🟡 Phase 1.4 진행 예정: Claude Adapter
-- 📦 테스트 21개 통과, Clippy 통과
+- ✅ Phase 1.4 완료: Claude Adapter
+- 🟡 Phase 2 진행 예정: Multi-Agent Conversation
+- 📦 테스트 26개 통과, Clippy 통과
 
 ### 다음 작업
 
-1. `src/adapters/claude.rs` - Claude API adapter
-2. LlmAdapter trait에 LlmMessage 적용
+1. `src/protocol/conversation.rs` - Conversation 모델
+2. `src/router/router.rs` - MessageRouter
 3. `axon send` 실제 기능 구현
 
 ### 빌드 & 테스트

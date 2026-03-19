@@ -7,7 +7,7 @@
 ## 현재 상태
 
 **Phase**: 1 - Core Protocol & CLI (MVP)
-**상태**: 🟢 Phase 1.2 완료, Phase 1.4 진행 예정
+**상태**: 🟢 Phase 1.4 완료, Phase 2 진행 예정
 
 ---
 
@@ -38,21 +38,30 @@
 
 ---
 
+#### Phase 1.4: Claude Adapter ✅
+- [x] ClaudeAdapter 구현 (`src/adapters/claude.rs`)
+- [x] LlmAdapter trait 수정 (LlmMessage 사용)
+- [x] Anthropic API 클라이언트
+- [x] Message 변환 (LlmMessage ↔ Anthropic format)
+- [x] Tool calling 지원
+- [x] AdapterBuilder 구현
+
+---
+
 ## 진행 중인 작업
 
-### Phase 1.4: Claude Adapter
-- [ ] Anthropic API 클라이언트
-- [ ] Message 변환 (LlmMessage ↔ Anthropic format)
-- [ ] Tool calling 지원
+### Phase 2.1: Conversation Orchestrator
+- [ ] Conversation 상태 관리
+- [ ] Turn policy (RoundRobin, Directed, Free)
 
 ---
 
 ## 다음 작업
 
-1. Claude adapter 구현 (`src/adapters/claude.rs`)
-2. LlmAdapter trait 수정 (LlmMessage 사용)
+1. Conversation 모델 구현 (`src/protocol/conversation.rs`)
+2. MessageRouter 구현 (`src/router/router.rs`)
 3. axon send 실제 기능 구현
-4. 통합 테스트
+4. axon converse 구현
 
 ---
 
@@ -62,7 +71,10 @@
 - Phase 1.2 Message Protocol 구현 완료
 - AgentId, Provider, AgentConfig 구현
 - LlmMessage, MessageType, MessageContent 구현
-- 21개 테스트 통과
+- Phase 1.4 Claude Adapter 구현 완료
+- ClaudeAdapter, LlmAdapter trait 구현
+- Anthropic API 통합
+- 26개 테스트 통과
 
 ### 2026-03-10 Session 1
 - 프로젝트 생성 및 초기 설정
