@@ -73,9 +73,9 @@
 - [x] Web fetch
 - [ ] Shell command (제한적)
 
-### 3.4 CLI 확장
-- [ ] `axon tool add/list/remove`
-- [ ] `--tools` 옵션으로 대화에 도구 연결
+### 3.4 CLI 확장 ✅
+- [x] `axon tool add/list/remove`
+- [ ] `--tools` 옵션으로 대화에 도구 연결 (Phase 4에서 구현)
 
 ---
 

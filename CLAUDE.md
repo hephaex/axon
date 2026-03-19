@@ -19,13 +19,17 @@
 - ✅ Phase 2 완료: Multi-Agent Conversation
   - Conversation Model, MessageRouter
   - `axon send`, `axon converse`, `axon pipe` 구현
-- 🟡 Phase 3 진행 예정: Tool Integration
-- 📦 테스트 41개 통과, Clippy 통과
+- ✅ Phase 3 완료: Tool Integration
+  - ToolRegistry, MinKy Adapter
+  - Filesystem Tools, Web Tools
+  - `axon tool list/add/remove` 구현
+- 🟡 Phase 4 진행 예정: Additional Adapters
+- 📦 테스트 59개 통과, Clippy 통과
 
 ### 다음 작업
 
-1. Phase 3: Tool Integration
-2. 추가 LLM Adapters (Gemini, OpenAI, Ollama)
+1. Phase 4: Additional Adapters (Gemini, OpenAI, Ollama)
+2. Phase 5: Advanced Features (Streaming, Persistence)
 
 ### 빌드 & 테스트
 

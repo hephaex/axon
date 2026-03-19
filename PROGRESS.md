@@ -6,8 +6,8 @@
 
 ## 현재 상태
 
-**Phase**: 3 - Tool Integration
-**상태**: 🟢 Phase 3.1-3.3 완료, 3.4 CLI 진행 예정
+**Phase**: 3 완료, Phase 4 시작 예정
+**상태**: 🟢 Phase 3 완료
 
 ---
 
@@ -77,41 +77,46 @@
 
 ---
 
-#### Phase 3.1-3.3: Tool Integration ✅
+#### Phase 3: Tool Integration ✅
 - [x] Tool trait, ToolRegistry 구현
 - [x] MCP 호환 포맷 지원
 - [x] Filesystem Tools (read_file, write_file, list_dir)
 - [x] Web Tools (web_fetch)
 - [x] MinKy Adapter (minky_search, minky_ask, minky_get)
+- [x] `axon tool add/list/remove` CLI 구현
 
 ---
 
 ## 진행 중인 작업
 
-### Phase 3.4: CLI 확장 (예정)
-- [ ] `axon tool add/list/remove`
-- [ ] `--tools` 옵션으로 대화에 도구 연결
+### Phase 4: Additional Adapters (예정)
+- [ ] Gemini Adapter (Google AI API)
+- [ ] OpenAI Adapter (GPT API)
+- [ ] Ollama Adapter (Local)
 
 ---
 
 ## 다음 작업
 
-1. Phase 3.4 CLI 확장 (tool add/list/remove, --tools 옵션)
-2. 추가 LLM Adapters (Gemini, OpenAI, Ollama)
+1. Phase 4: Additional LLM Adapters (Gemini, OpenAI, Ollama)
+2. Phase 5: Advanced Features (Streaming, Persistence)
 
 ---
 
 ## 세션 로그
 
 ### 2026-03-19 Session 5
+- Phase 3 완전 완료
 - Phase 3.1 Tool Registry 구현
-- Tool trait, ToolRegistry 구현
-- MCP 호환 포맷 지원
+  - Tool trait, ToolRegistry 구현
+  - MCP 호환 포맷 지원
 - Phase 3.2 MinKy Adapter 구현
-- minky_search, minky_ask, minky_get
+  - minky_search, minky_ask, minky_get
 - Phase 3.3 Built-in Tools 구현
-- Filesystem (read_file, write_file, list_dir)
-- Web (web_fetch)
+  - Filesystem (read_file, write_file, list_dir)
+  - Web (web_fetch)
+- Phase 3.4 CLI 확장 구현
+  - axon tool list/add/remove
 - 59개 테스트 통과
 
 ### 2026-03-19 Session 4
