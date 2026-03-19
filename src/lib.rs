@@ -25,8 +25,10 @@
 
 pub mod error;
 pub mod config;
+pub mod protocol;
 pub mod adapters;
 pub mod tools;
 
 // Re-exports
 pub use error::{AxonError, Result};
+pub use protocol::{AgentConfig, AgentId, LlmMessage, MessageContent, MessageType, Provider};

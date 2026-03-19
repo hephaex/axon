@@ -6,7 +6,9 @@
 //! - `AgentId` - Agent identifier
 //! - `Conversation` - Conversation state
 
-// TODO: Implement protocol types
-// pub mod message;
-// pub mod agent;
-// pub mod conversation;
+pub mod agent;
+pub mod message;
+
+// Re-exports for convenience
+pub use agent::{AgentConfig, AgentId, Provider};
+pub use message::{ContentPart, LlmMessage, MessageContent, MessageType};
