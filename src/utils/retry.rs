@@ -112,7 +112,7 @@ fn rand_simple() -> f64 {
 /// # Arguments
 ///
 /// * `config` - Retry configuration
-/// * `operation` - Async closure that returns Result<T>
+/// * `operation` - Async closure that returns `Result<T>`
 ///
 /// # Returns
 ///
