@@ -16,16 +16,17 @@
 ### 현재 상태 (2026-03-19)
 
 - ✅ Phase 1 완료: Core Protocol & CLI
-- ✅ Phase 2.1 완료: Conversation Model
-- ✅ Phase 2.2 완료: MessageRouter
-- 🟡 Phase 2.3 진행 예정: CLI 실제 기능 구현
+- ✅ Phase 2 완료: Multi-Agent Conversation
+  - Conversation Model, MessageRouter
+  - `axon send`, `axon converse` 구현
+- 🟡 Phase 3 진행 예정: Tool Integration
 - 📦 테스트 41개 통과, Clippy 통과
 
 ### 다음 작업
 
-1. `axon send` 실제 기능 구현
-2. `axon converse` 멀티 에이전트 대화
-3. Phase 3: Tool Integration
+1. `axon pipe` 파이프라인 모드 구현
+2. Phase 3: Tool Integration
+3. 추가 LLM Adapters (Gemini, OpenAI, Ollama)
 
 ### 빌드 & 테스트
 

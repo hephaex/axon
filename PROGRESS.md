@@ -7,7 +7,7 @@
 ## 현재 상태
 
 **Phase**: 2 - Multi-Agent Conversation
-**상태**: 🟢 Phase 2.2 완료 (Conversation + Router)
+**상태**: 🟢 Phase 2.3 완료 (CLI 실제 기능)
 
 ---
 
@@ -62,21 +62,30 @@
 - [x] RouterStats 통계
 - [x] 테스트 6개 통과
 
+#### Phase 2.3: CLI 실제 기능 ✅
+- [x] `axon send` 실제 기능 구현
+  - Claude API 연동
+  - 에러 핸들링 (API 키 검증)
+- [x] `axon converse` 멀티 에이전트 대화
+  - RoundRobin TurnPolicy 적용
+  - MessageRouter 통합
+  - max_turns 지원
+
 ---
 
 ## 진행 중인 작업
 
-### Phase 2.3: CLI 실제 기능 구현
-- [ ] `axon send` 실제 기능
-- [ ] `axon converse` 멀티 에이전트 대화
+### Phase 3: Tool Integration (예정)
+- [ ] Tool Registry 구현
+- [ ] MinKy Adapter 구현
 
 ---
 
 ## 다음 작업
 
-1. axon send 실제 기능 구현
-2. axon converse 구현
-3. Phase 3 Tool Integration
+1. axon pipe 파이프라인 모드 구현
+2. Phase 3 Tool Integration
+3. 추가 LLM Adapters (Gemini, OpenAI, Ollama)
 
 ---
 
@@ -89,6 +98,9 @@
 - Phase 2.2 MessageRouter 구현 완료
 - tokio mpsc 기반 메시지 큐
 - Agent 등록/해제/라우팅 로직
+- Phase 2.3 CLI 실제 기능 구현 완료
+- axon send: Claude API 연동, 에러 핸들링
+- axon converse: 멀티 에이전트 대화, RoundRobin
 - 41개 테스트 통과
 
 ### 2026-03-19 Session 2
