@@ -19,9 +19,9 @@ const DEFAULT_MAX_TOKENS: u32 = 4096;
 
 /// OpenAI adapter for GPT API
 pub struct OpenAiAdapter {
-    config: AgentConfig,
-    client: Client,
-    api_key: String,
+    pub(crate) config: AgentConfig,
+    pub(crate) client: Client,
+    pub(crate) api_key: String,
     tools: Vec<ToolDefinition>,
 }
 
@@ -68,7 +68,7 @@ impl OpenAiAdapter {
     }
 
     /// Get API URL (supports custom endpoint for Azure, etc.)
-    fn get_api_url(&self) -> &str {
+    pub(crate) fn get_api_url(&self) -> &str {
         self.config
             .endpoint
             .as_deref()
@@ -76,7 +76,7 @@ impl OpenAiAdapter {
     }
 
     /// Convert LlmMessage to OpenAI request format
-    fn to_openai_request(&self, message: &LlmMessage, history: &[LlmMessage]) -> OpenAiRequest {
+    pub(crate) fn to_openai_request(&self, message: &LlmMessage, history: &[LlmMessage]) -> OpenAiRequest {
         let mut messages = Vec::new();
 
         // Add system prompt if set
@@ -306,7 +306,7 @@ impl LlmAdapter for OpenAiAdapter {
 // OpenAI API types
 
 #[derive(Debug, Serialize)]
-struct OpenAiRequest {
+pub(crate) struct OpenAiRequest {
     model: String,
     messages: Vec<ChatMessage>,
     #[serde(skip_serializing_if = "Option::is_none")]

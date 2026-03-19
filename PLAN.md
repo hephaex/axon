@@ -100,22 +100,28 @@
 
 ## Phase 5: Advanced Features
 
-### 5.1 Streaming
-- [ ] 스트리밍 응답 지원
-- [ ] 실시간 출력
+### 5.1 Streaming ✅
+- [x] StreamingAdapter trait 정의
+- [x] StreamChunk, StreamUsage 타입
+- [x] ClaudeAdapter 스트리밍 (SSE)
+- [x] OpenAiAdapter 스트리밍 (SSE)
+- [x] GeminiAdapter 스트리밍 (SSE)
+- [x] OllamaAdapter 스트리밍 (NDJSON)
+- [x] collect_stream 유틸리티 함수
 
-### 5.2 Persistence
-- [ ] 대화 기록 저장
-- [ ] 세션 복구
+### 5.2 Persistence ✅
+- [x] ConversationStore trait 정의
+- [x] FileStore (JSON 파일 기반)
+- [x] MemoryStore (인메모리, 테스트용)
 
 ### 5.3 Server Mode
 - [ ] WebSocket 서버
 - [ ] HTTP API 엔드포인트
 
-### 5.4 Reliability
-- [ ] Rate limiting
-- [ ] Retry with backoff
-- [ ] 에러 복구
+### 5.4 Reliability ✅
+- [x] Retry with exponential backoff
+- [x] Token bucket rate limiting
+- [x] Per-provider rate limiters
 
 ---
 

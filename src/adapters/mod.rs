@@ -5,16 +5,26 @@
 //! - `GeminiAdapter` - Google Gemini API
 //! - `OpenAiAdapter` - OpenAI GPT API
 //! - `OllamaAdapter` - Local Ollama
+//!
+//! Streaming support:
+//! - `StreamingAdapter` trait for streaming responses
+//! - `StreamChunk` for response chunks
 
 pub mod claude;
+mod claude_streaming;
 pub mod gemini;
+mod gemini_streaming;
 pub mod ollama;
+mod ollama_streaming;
 pub mod openai;
+mod openai_streaming;
+pub mod streaming;
 
 pub use claude::ClaudeAdapter;
 pub use gemini::GeminiAdapter;
 pub use ollama::OllamaAdapter;
 pub use openai::OpenAiAdapter;
+pub use streaming::{collect_stream, BoxStream, StreamChunk, StreamResult, StreamUsage, StreamingAdapter};
 
 use async_trait::async_trait;
 

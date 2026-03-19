@@ -6,8 +6,8 @@
 
 ## 현재 상태
 
-**Phase**: 4 완료, Phase 5 시작 예정
-**상태**: 🟢 Phase 4 완료
+**Phase**: 5 진행 중 (Streaming, Reliability, Persistence 완료)
+**상태**: 🟡 Phase 5 진행 중 (Server Mode 남음)
 
 ---
 
@@ -99,26 +99,56 @@
 
 ## 진행 중인 작업
 
-### Phase 5: Advanced Features (예정)
-- [ ] Streaming responses
-- [ ] Conversation persistence
-- [ ] WebSocket server mode
+### Phase 5: Advanced Features (진행 중)
+- [x] 5.4 Reliability
+  - Retry with exponential backoff
+  - Token bucket rate limiting
+- [x] 5.2 Persistence
+  - ConversationStore trait
+  - FileStore, MemoryStore
+- [x] 5.1 Streaming responses
+  - StreamingAdapter trait
+  - Claude, OpenAI, Gemini, Ollama 스트리밍
+  - collect_stream 유틸리티
+- [ ] 5.3 WebSocket server mode
 
 ---
 
 ## 다음 작업
 
-1. Phase 5: Advanced Features
-   - Streaming responses 지원
-   - Conversation persistence
-   - WebSocket server mode
-2. Phase 5.4: Reliability
-   - Rate limiting
-   - Retry with backoff
+1. Phase 5.3: Server Mode
+   - WebSocket 서버
+   - HTTP API 엔드포인트
+2. CLI 스트리밍 출력 통합
+   - axon send --stream 옵션
 
 ---
 
 ## 세션 로그
+
+### 2026-03-20 Session 8
+- Phase 5 진행: Streaming 구현
+- 5.1 Streaming 구현
+  - StreamingAdapter trait 정의
+  - StreamChunk, StreamUsage 타입
+  - ClaudeAdapter 스트리밍 (SSE)
+  - OpenAiAdapter 스트리밍 (SSE)
+  - GeminiAdapter 스트리밍 (SSE)
+  - OllamaAdapter 스트리밍 (NDJSON)
+  - collect_stream 유틸리티 함수
+- 107개 테스트 통과
+
+### 2026-03-20 Session 7
+- Phase 5 진행: Advanced Features
+- 5.4 Reliability 구현
+  - RetryConfig, retry_with_backoff
+  - RateLimiter (token bucket)
+  - RateLimiterRegistry (per-provider)
+- 5.2 Persistence 구현
+  - ConversationStore trait
+  - FileStore (JSON 파일 기반)
+  - MemoryStore (테스트용)
+- 104개 테스트 통과
 
 ### 2026-03-19 Session 6
 - Phase 4 완료: Additional LLM Adapters

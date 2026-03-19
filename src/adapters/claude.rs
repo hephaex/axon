@@ -19,9 +19,9 @@ const DEFAULT_MAX_TOKENS: u32 = 4096;
 
 /// Claude adapter for Anthropic API
 pub struct ClaudeAdapter {
-    config: AgentConfig,
-    client: Client,
-    api_key: String,
+    pub(crate) config: AgentConfig,
+    pub(crate) client: Client,
+    pub(crate) api_key: String,
     tools: Vec<ToolDefinition>,
 }
 
@@ -68,7 +68,7 @@ impl ClaudeAdapter {
     }
 
     /// Convert LlmMessage to Anthropic request format
-    fn to_anthropic_request(&self, message: &LlmMessage, history: &[LlmMessage]) -> AnthropicRequest {
+    pub(crate) fn to_anthropic_request(&self, message: &LlmMessage, history: &[LlmMessage]) -> AnthropicRequest {
         let mut messages = Vec::new();
 
         // Add history
@@ -279,7 +279,7 @@ impl LlmAdapter for ClaudeAdapter {
 // Anthropic API types
 
 #[derive(Debug, Serialize)]
-struct AnthropicRequest {
+pub(crate) struct AnthropicRequest {
     model: String,
     max_tokens: u32,
     #[serde(skip_serializing_if = "Option::is_none")]

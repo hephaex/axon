@@ -19,9 +19,9 @@ const DEFAULT_MAX_TOKENS: u32 = 4096;
 
 /// Gemini adapter for Google AI API
 pub struct GeminiAdapter {
-    config: AgentConfig,
-    client: Client,
-    api_key: String,
+    pub(crate) config: AgentConfig,
+    pub(crate) client: Client,
+    pub(crate) api_key: String,
     tools: Vec<ToolDefinition>,
 }
 
@@ -76,7 +76,7 @@ impl GeminiAdapter {
     }
 
     /// Convert LlmMessage to Gemini request format
-    fn to_gemini_request(&self, message: &LlmMessage, history: &[LlmMessage]) -> GeminiRequest {
+    pub(crate) fn to_gemini_request(&self, message: &LlmMessage, history: &[LlmMessage]) -> GeminiRequest {
         let mut contents = Vec::new();
 
         // Add history
@@ -303,7 +303,7 @@ impl LlmAdapter for GeminiAdapter {
 
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
-struct GeminiRequest {
+pub(crate) struct GeminiRequest {
     contents: Vec<Content>,
     #[serde(skip_serializing_if = "Option::is_none")]
     generation_config: Option<GenerationConfig>,

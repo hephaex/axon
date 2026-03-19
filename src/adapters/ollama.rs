@@ -18,9 +18,9 @@ const DEFAULT_OLLAMA_URL: &str = "http://localhost:11434";
 
 /// Ollama adapter for local LLM
 pub struct OllamaAdapter {
-    config: AgentConfig,
-    client: Client,
-    base_url: String,
+    pub(crate) config: AgentConfig,
+    pub(crate) client: Client,
+    pub(crate) base_url: String,
     tools: Vec<ToolDefinition>,
 }
 
@@ -46,12 +46,12 @@ impl OllamaAdapter {
     }
 
     /// Build API URL for chat endpoint
-    fn build_url(&self) -> String {
+    pub(crate) fn build_url(&self) -> String {
         format!("{}/api/chat", self.base_url)
     }
 
     /// Convert LlmMessage to Ollama request format
-    fn to_ollama_request(&self, message: &LlmMessage, history: &[LlmMessage]) -> OllamaRequest {
+    pub(crate) fn to_ollama_request(&self, message: &LlmMessage, history: &[LlmMessage]) -> OllamaRequest {
         let mut messages = Vec::new();
 
         // Add system prompt if set
@@ -288,7 +288,7 @@ impl LlmAdapter for OllamaAdapter {
 // Ollama API types
 
 #[derive(Debug, Serialize)]
-struct OllamaRequest {
+pub(crate) struct OllamaRequest {
     model: String,
     messages: Vec<OllamaMessage>,
     #[serde(skip_serializing_if = "Option::is_none")]

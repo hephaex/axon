@@ -39,3 +39,4 @@ pub use router::{MessageRouter, RouterStats};
 pub use tools::{Tool, ToolDefinition, ToolRegistry, ToolResult};
 pub use utils::{retry_with_backoff, RateLimiter, RateLimiterRegistry, RetryConfig};
 pub use persistence::{ConversationStore, FileStore, MemoryStore};
+pub use adapters::{StreamChunk, StreamingAdapter, StreamUsage, collect_stream};
