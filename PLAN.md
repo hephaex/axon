@@ -114,9 +114,11 @@
 - [x] FileStore (JSON 파일 기반)
 - [x] MemoryStore (인메모리, 테스트용)
 
-### 5.3 Server Mode
-- [ ] WebSocket 서버
-- [ ] HTTP API 엔드포인트
+### 5.3 Server Mode ✅
+- [x] WebSocket 서버
+- [x] HTTP API 엔드포인트
+- [x] ServerState 공유 상태 관리
+- [x] CLI `axon serve` 명령 구현
 
 ### 5.4 Reliability ✅
 - [x] Retry with exponential backoff

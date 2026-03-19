@@ -5,6 +5,7 @@
 use axon::adapters::{ClaudeAdapter, LlmAdapter};
 use axon::protocol::{AgentConfig, Conversation, LlmMessage, Provider, TurnPolicy};
 use axon::router::MessageRouter;
+use axon::server::{ServerConfig, ServerState, start_server};
 use axon::tools::{MinkyConfig, ToolRegistry};
 use axon::tools::minky::register_minky_tools;
 use clap::{Parser, Subcommand};
@@ -164,10 +165,20 @@ async fn main() -> anyhow::Result<()> {
 
     match cli.command {
         Commands::Serve { port, host } => {
-            tracing::info!("Starting Axon router on {}:{}", host, port);
-            // TODO: Implement serve command
-            println!("Axon router starting on {}:{}...", host, port);
-            println!("(Not yet implemented)");
+            tracing::info!("Starting Axon server on {}:{}", host, port);
+
+            let config = ServerConfig {
+                host,
+                port,
+                cors_permissive: true,
+            };
+
+            let state = ServerState::new();
+
+            if let Err(e) = start_server(config, state).await {
+                eprintln!("Server error: {}", e);
+                std::process::exit(1);
+            }
         }
 
         Commands::Send { from, to, message } => {

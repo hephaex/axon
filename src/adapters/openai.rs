@@ -301,6 +301,10 @@ impl LlmAdapter for OpenAiAdapter {
         }
         Ok(true)
     }
+
+    fn as_streaming(&self) -> Option<&dyn super::StreamingAdapter> {
+        Some(self)
+    }
 }
 
 // OpenAI API types

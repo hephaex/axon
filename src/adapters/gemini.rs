@@ -297,6 +297,10 @@ impl LlmAdapter for GeminiAdapter {
         }
         Ok(true)
     }
+
+    fn as_streaming(&self) -> Option<&dyn super::StreamingAdapter> {
+        Some(self)
+    }
 }
 
 // Gemini API types

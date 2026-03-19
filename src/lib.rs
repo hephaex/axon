@@ -31,6 +31,7 @@ pub mod router;
 pub mod tools;
 pub mod utils;
 pub mod persistence;
+pub mod server;
 
 // Re-exports
 pub use error::{AxonError, Result};
@@ -40,3 +41,4 @@ pub use tools::{Tool, ToolDefinition, ToolRegistry, ToolResult};
 pub use utils::{retry_with_backoff, RateLimiter, RateLimiterRegistry, RetryConfig};
 pub use persistence::{ConversationStore, FileStore, MemoryStore};
 pub use adapters::{StreamChunk, StreamingAdapter, StreamUsage, collect_stream};
+pub use server::{ServerConfig, ServerState, start_server};

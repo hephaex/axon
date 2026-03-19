@@ -274,6 +274,10 @@ impl LlmAdapter for ClaudeAdapter {
         }
         Ok(true)
     }
+
+    fn as_streaming(&self) -> Option<&dyn super::StreamingAdapter> {
+        Some(self)
+    }
 }
 
 // Anthropic API types

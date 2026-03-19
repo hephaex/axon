@@ -283,6 +283,10 @@ impl LlmAdapter for OllamaAdapter {
             Err(_) => Ok(false),
         }
     }
+
+    fn as_streaming(&self) -> Option<&dyn super::StreamingAdapter> {
+        Some(self)
+    }
 }
 
 // Ollama API types
