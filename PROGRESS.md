@@ -6,8 +6,8 @@
 
 ## 현재 상태
 
-**Phase**: 2 - Multi-Agent Conversation
-**상태**: 🟢 Phase 2.3 완료 (CLI 실제 기능)
+**Phase**: 2 완료, Phase 3 시작 예정
+**상태**: 🟢 Phase 2 완료 (CLI 완전 구현)
 
 ---
 
@@ -70,6 +70,10 @@
   - RoundRobin TurnPolicy 적용
   - MessageRouter 통합
   - max_turns 지원
+- [x] `axon pipe` 파이프라인 모드
+  - stdin 입력 처리
+  - 체인 문법 파싱 (agent:task -> agent:task)
+  - 순차적 에이전트 처리
 
 ---
 
@@ -83,13 +87,19 @@
 
 ## 다음 작업
 
-1. axon pipe 파이프라인 모드 구현
-2. Phase 3 Tool Integration
-3. 추가 LLM Adapters (Gemini, OpenAI, Ollama)
+1. Phase 3 Tool Integration
+2. 추가 LLM Adapters (Gemini, OpenAI, Ollama)
 
 ---
 
 ## 세션 로그
+
+### 2026-03-19 Session 4
+- Phase 2.3 axon pipe 구현 완료
+- stdin에서 입력 읽기
+- 체인 문법 파싱 (agent:task -> agent:task)
+- 순차적 에이전트 처리
+- Phase 2 완전 완료
 
 ### 2026-03-19 Session 3
 - Phase 2.1 Conversation Model 구현 완료

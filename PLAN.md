@@ -51,7 +51,7 @@
 ### 2.3 CLI 실제 기능 ✅
 - [x] `axon send` - 단일 메시지 전송 (Claude API)
 - [x] `axon converse` - 멀티 에이전트 대화 (RoundRobin)
-- [ ] `axon pipe` - 파이프라인 모드
+- [x] `axon pipe` - 파이프라인 모드
 
 ---
 
