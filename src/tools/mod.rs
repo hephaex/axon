@@ -4,14 +4,17 @@
 //! - `MinkyTool` - MinKy knowledge search integration
 //! - `FilesystemTool` - File operations
 //! - `WebTool` - Web fetch
+//! - `ShellTool` - Shell command execution (restricted)
 
 pub mod filesystem;
 pub mod minky;
 pub mod registry;
+pub mod shell;
 pub mod web;
 
 pub use minky::MinkyConfig;
 pub use registry::{Tool, ToolRegistry};
+pub use shell::{ShellConfig, ShellTool};
 
 use serde::{Deserialize, Serialize};
 

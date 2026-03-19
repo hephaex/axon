@@ -10,6 +10,7 @@ use axon::router::MessageRouter;
 use axon::server::{start_server, ServerConfig, ServerState};
 use axon::tools::filesystem::{FilesystemConfig, ListDirTool, ReadFileTool, WriteFileTool};
 use axon::tools::minky::register_minky_tools;
+use axon::tools::shell::{ShellConfig, ShellTool};
 use axon::tools::web::{WebConfig, WebFetchTool};
 use axon::tools::{MinkyConfig, ToolDefinition, ToolRegistry};
 use clap::{Parser, Subcommand};
@@ -219,6 +220,13 @@ async fn setup_tools(
                 if let Ok(tool) = WebFetchTool::new(web_config) {
                     registry.register(tool).await;
                 }
+            }
+            "shell" => {
+                let shell_config = ShellConfig {
+                    working_dir: fs_config.base_dir.clone(),
+                    ..ShellConfig::default()
+                };
+                registry.register(ShellTool::new(shell_config)).await;
             }
             _ => {
                 eprintln!("Warning: Unknown tool '{}', skipping", name);

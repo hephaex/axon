@@ -56,11 +56,14 @@ axon send --from user --tools read_file,list_dir "List the files in the current 
 # Enable multiple tools including web fetch
 axon send --from user --tools read_file,web_fetch "Summarize the content from https://example.com"
 
+# Enable shell commands (restricted to safe commands)
+axon send --from user --tools shell "Run 'git status' and 'ls -la'"
+
 # Enable write operations (sandboxed to base-dir)
 axon send --from user --tools read_file,write_file --allow-write --base-dir ./output "Create a summary file"
 
 # Tools in multi-agent conversations
-axon converse --agents "analyst,critic" --tools read_file,list_dir --topic "Review code in src/"
+axon converse --agents "analyst,critic" --tools read_file,shell --topic "Review code in src/"
 ```
 
 ### Multi-Agent Conversation
@@ -167,6 +170,7 @@ curl -X POST http://localhost:8090/api/send \
 | `write_file` | Write to a file |
 | `list_dir` | List directory contents |
 | `web_fetch` | Fetch content from URL |
+| `shell` | Execute shell commands (restricted to safe commands) |
 | `minky_search` | Search MinKy knowledge base |
 | `minky_ask` | RAG question answering |
 
