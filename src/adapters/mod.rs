@@ -8,6 +8,8 @@
 
 pub mod claude;
 
+pub use claude::ClaudeAdapter;
+
 use async_trait::async_trait;
 
 use crate::protocol::{AgentConfig, AgentId, LlmMessage};

@@ -50,12 +50,21 @@ impl ClaudeAdapter {
             .as_deref()
             .unwrap_or("ANTHROPIC_API_KEY");
 
-        std::env::var(env_var).map_err(|_| {
+        let api_key = std::env::var(env_var).map_err(|_| {
             AxonError::config(format!(
                 "API key not found. Set {} environment variable.",
                 env_var
             ))
-        })
+        })?;
+
+        if api_key.is_empty() {
+            return Err(AxonError::config(format!(
+                "API key is empty. Set {} environment variable.",
+                env_var
+            )));
+        }
+
+        Ok(api_key)
     }
 
     /// Convert LlmMessage to Anthropic request format

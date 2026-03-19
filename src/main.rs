@@ -2,8 +2,11 @@
 //!
 //! Entry point for the axon command-line interface.
 
+use axon::adapters::{ClaudeAdapter, LlmAdapter};
+use axon::protocol::{AgentConfig, LlmMessage, Provider};
 use clap::{Parser, Subcommand};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
+use uuid::Uuid;
 
 /// Axon - LLM-to-LLM Communication Framework
 #[derive(Parser)]
@@ -166,9 +169,36 @@ async fn main() -> anyhow::Result<()> {
         Commands::Send { from, to, message } => {
             let target = to.as_deref().unwrap_or("broadcast");
             tracing::info!("Sending message from {} to {}", from, target);
-            // TODO: Implement send command
-            println!("Sending from {} to {}: {}", from, target, message);
-            println!("(Not yet implemented)");
+
+            // For MVP, we support Claude adapter only
+            // TODO: Support other providers via config
+            let config = AgentConfig::new(from.as_str(), Provider::Anthropic, "claude-sonnet-4-20250514");
+
+            let adapter: ClaudeAdapter = match ClaudeAdapter::new(config) {
+                Ok(a) => a,
+                Err(e) => {
+                    eprintln!("Error: {}", e);
+                    eprintln!("Hint: Set ANTHROPIC_API_KEY environment variable");
+                    std::process::exit(1);
+                }
+            };
+
+            // Create conversation ID
+            let conv_id = Uuid::new_v4();
+
+            // Build message (user → agent)
+            let llm_message = LlmMessage::chat("user", Some(from.as_str().into()), &message, conv_id);
+
+            // Send message and get response
+            match adapter.process(&llm_message).await {
+                Ok(response) => {
+                    println!("{}", response.content.as_text());
+                }
+                Err(e) => {
+                    eprintln!("Error: {}", e);
+                    std::process::exit(1);
+                }
+            }
         }
 
         Commands::Converse { agents, topic, max_turns } => {
