@@ -1,5 +1,8 @@
 # Axon
 
+[![CI](https://github.com/hephaex/axon/actions/workflows/ci.yml/badge.svg)](https://github.com/hephaex/axon/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 > LLM-to-LLM Communication Framework
 
 Axon enables multiple LLM agents to communicate, collaborate, and orchestrate complex workflows. Built in Rust for performance and reliability.
