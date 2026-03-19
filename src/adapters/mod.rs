@@ -7,8 +7,14 @@
 //! - `OllamaAdapter` - Local Ollama
 
 pub mod claude;
+pub mod gemini;
+pub mod ollama;
+pub mod openai;
 
 pub use claude::ClaudeAdapter;
+pub use gemini::GeminiAdapter;
+pub use ollama::OllamaAdapter;
+pub use openai::OpenAiAdapter;
 
 use async_trait::async_trait;
 
@@ -72,13 +78,16 @@ impl AdapterBuilder {
                 Ok(Box::new(adapter))
             }
             Provider::Google => {
-                Err(crate::AxonError::config("Gemini adapter not yet implemented"))
+                let adapter = gemini::GeminiAdapter::new(config)?;
+                Ok(Box::new(adapter))
             }
             Provider::OpenAi => {
-                Err(crate::AxonError::config("OpenAI adapter not yet implemented"))
+                let adapter = openai::OpenAiAdapter::new(config)?;
+                Ok(Box::new(adapter))
             }
             Provider::Ollama => {
-                Err(crate::AxonError::config("Ollama adapter not yet implemented"))
+                let adapter = ollama::OllamaAdapter::new(config)?;
+                Ok(Box::new(adapter))
             }
         }
     }
