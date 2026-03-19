@@ -42,6 +42,9 @@ export ANTHROPIC_API_KEY="your-key"
 
 # Send a single message
 axon send --from user --to claude "Explain quantum computing in simple terms"
+
+# Stream output in real-time
+axon send --from user --stream "Write a short poem about coding"
 ```
 
 ### Multi-Agent Conversation
@@ -80,7 +83,7 @@ curl -X POST http://localhost:8090/api/send \
 
 | Command | Description |
 |---------|-------------|
-| `axon send` | Send a single message to an agent |
+| `axon send` | Send a single message to an agent (supports `--stream`) |
 | `axon converse` | Start multi-agent conversation |
 | `axon pipe` | Pipeline mode (stdin → agents → stdout) |
 | `axon serve` | Start HTTP/WebSocket server |

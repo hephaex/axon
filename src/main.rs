@@ -2,13 +2,14 @@
 //!
 //! Entry point for the axon command-line interface.
 
-use axon::adapters::{ClaudeAdapter, LlmAdapter};
+use axon::adapters::{ClaudeAdapter, LlmAdapter, StreamingAdapter};
 use axon::protocol::{AgentConfig, Conversation, LlmMessage, Provider, TurnPolicy};
 use axon::router::MessageRouter;
 use axon::server::{start_server, ServerConfig, ServerState};
 use axon::tools::minky::register_minky_tools;
 use axon::tools::{MinkyConfig, ToolRegistry};
 use clap::{Parser, Subcommand};
+use futures::StreamExt;
 use std::io::{self, Read as IoRead};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 use uuid::Uuid;
@@ -54,6 +55,10 @@ enum Commands {
         /// Target agent (optional for broadcast)
         #[arg(short, long)]
         to: Option<String>,
+
+        /// Enable streaming output
+        #[arg(short, long)]
+        stream: bool,
 
         /// Message content
         message: String,
@@ -181,7 +186,12 @@ async fn main() -> anyhow::Result<()> {
             }
         }
 
-        Commands::Send { from, to, message } => {
+        Commands::Send {
+            from,
+            to,
+            stream: use_stream,
+            message,
+        } => {
             let target = to.as_deref().unwrap_or("broadcast");
             tracing::info!("Sending message from {} to {}", from, target);
 
@@ -209,14 +219,57 @@ async fn main() -> anyhow::Result<()> {
             let llm_message =
                 LlmMessage::chat("user", Some(from.as_str().into()), &message, conv_id);
 
-            // Send message and get response
-            match adapter.process(&llm_message).await {
-                Ok(response) => {
-                    println!("{}", response.content.as_text());
+            if use_stream {
+                // Streaming mode: print chunks as they arrive
+                use std::io::Write;
+
+                match adapter.process_stream(&llm_message).await {
+                    Ok(mut stream) => {
+                        while let Some(result) = stream.next().await {
+                            match result {
+                                Ok(chunk) => {
+                                    if !chunk.delta.is_empty() {
+                                        print!("{}", chunk.delta);
+                                        // Flush to show output immediately
+                                        std::io::stdout().flush().ok();
+                                    }
+                                    if chunk.is_final {
+                                        println!(); // Final newline
+                                        if cli.verbose {
+                                            if let Some(usage) = chunk.usage {
+                                                eprintln!(
+                                                    "\n[tokens: {} in, {} out]",
+                                                    usage.input_tokens, usage.output_tokens
+                                                );
+                                            }
+                                            if let Some(reason) = chunk.stop_reason {
+                                                eprintln!("[stop_reason: {}]", reason);
+                                            }
+                                        }
+                                    }
+                                }
+                                Err(e) => {
+                                    eprintln!("\nStream error: {}", e);
+                                    std::process::exit(1);
+                                }
+                            }
+                        }
+                    }
+                    Err(e) => {
+                        eprintln!("Error: {}", e);
+                        std::process::exit(1);
+                    }
                 }
-                Err(e) => {
-                    eprintln!("Error: {}", e);
-                    std::process::exit(1);
+            } else {
+                // Non-streaming mode: wait for complete response
+                match adapter.process(&llm_message).await {
+                    Ok(response) => {
+                        println!("{}", response.content.as_text());
+                    }
+                    Err(e) => {
+                        eprintln!("Error: {}", e);
+                        std::process::exit(1);
+                    }
                 }
             }
         }
