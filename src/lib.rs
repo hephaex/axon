@@ -29,9 +29,13 @@ pub mod protocol;
 pub mod adapters;
 pub mod router;
 pub mod tools;
+pub mod utils;
+pub mod persistence;
 
 // Re-exports
 pub use error::{AxonError, Result};
 pub use protocol::{AgentConfig, AgentId, LlmMessage, MessageContent, MessageType, Provider};
 pub use router::{MessageRouter, RouterStats};
 pub use tools::{Tool, ToolDefinition, ToolRegistry, ToolResult};
+pub use utils::{retry_with_backoff, RateLimiter, RateLimiterRegistry, RetryConfig};
+pub use persistence::{ConversationStore, FileStore, MemoryStore};
