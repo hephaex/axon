@@ -57,20 +57,20 @@
 
 ## Phase 3: Tool Integration
 
-### 3.1 Tool Registry
-- [ ] ToolDefinition 구조체
-- [ ] Tool 등록/조회/실행
-- [ ] MCP 호환 포맷
+### 3.1 Tool Registry ✅
+- [x] ToolDefinition 구조체
+- [x] Tool 등록/조회/실행
+- [x] MCP 호환 포맷
 
-### 3.2 MinKy Adapter
-- [ ] HTTP 클라이언트
-- [ ] `minky_search` 도구
-- [ ] `minky_ask` 도구
-- [ ] `minky_get` 도구
+### 3.2 MinKy Adapter ✅
+- [x] HTTP 클라이언트
+- [x] `minky_search` 도구
+- [x] `minky_ask` 도구
+- [x] `minky_get` 도구
 
-### 3.3 Built-in Tools
-- [ ] File system (read, write, list)
-- [ ] Web fetch
+### 3.3 Built-in Tools ✅
+- [x] File system (read, write, list)
+- [x] Web fetch
 - [ ] Shell command (제한적)
 
 ### 3.4 CLI 확장
