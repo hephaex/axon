@@ -45,10 +45,7 @@ impl ClaudeAdapter {
 
     /// Get API key from environment
     fn get_api_key(config: &AgentConfig) -> Result<String> {
-        let env_var = config
-            .api_key_env
-            .as_deref()
-            .unwrap_or("ANTHROPIC_API_KEY");
+        let env_var = config.api_key_env.as_deref().unwrap_or("ANTHROPIC_API_KEY");
 
         let api_key = std::env::var(env_var).map_err(|_| {
             AxonError::config(format!(
@@ -68,7 +65,11 @@ impl ClaudeAdapter {
     }
 
     /// Convert LlmMessage to Anthropic request format
-    pub(crate) fn to_anthropic_request(&self, message: &LlmMessage, history: &[LlmMessage]) -> AnthropicRequest {
+    pub(crate) fn to_anthropic_request(
+        &self,
+        message: &LlmMessage,
+        history: &[LlmMessage],
+    ) -> AnthropicRequest {
         let mut messages = Vec::new();
 
         // Add history
@@ -87,7 +88,12 @@ impl ClaudeAdapter {
             tools: if self.tools.is_empty() {
                 None
             } else {
-                Some(self.tools.iter().map(|t| AnthropicTool::from(t.clone())).collect())
+                Some(
+                    self.tools
+                        .iter()
+                        .map(|t| AnthropicTool::from(t.clone()))
+                        .collect(),
+                )
             },
             temperature: self.config.temperature,
         }
@@ -108,25 +114,25 @@ impl ClaudeAdapter {
                     text: value.to_string(),
                 }]
             }
-            MessageContent::Parts(parts) => {
-                parts
-                    .iter()
-                    .map(|p| match p {
-                        crate::protocol::ContentPart::Text { text } => {
-                            AnthropicContent::Text { text: text.clone() }
-                        }
-                        crate::protocol::ContentPart::Image { base64, media_type, .. } => {
-                            AnthropicContent::Image {
-                                source: ImageSource {
-                                    r#type: "base64".to_string(),
-                                    media_type: media_type.clone().unwrap_or_else(|| "image/png".to_string()),
-                                    data: base64.clone().unwrap_or_default(),
-                                },
-                            }
-                        }
-                    })
-                    .collect()
-            }
+            MessageContent::Parts(parts) => parts
+                .iter()
+                .map(|p| match p {
+                    crate::protocol::ContentPart::Text { text } => {
+                        AnthropicContent::Text { text: text.clone() }
+                    }
+                    crate::protocol::ContentPart::Image {
+                        base64, media_type, ..
+                    } => AnthropicContent::Image {
+                        source: ImageSource {
+                            r#type: "base64".to_string(),
+                            media_type: media_type
+                                .clone()
+                                .unwrap_or_else(|| "image/png".to_string()),
+                            data: base64.clone().unwrap_or_default(),
+                        },
+                    },
+                })
+                .collect(),
         };
 
         AnthropicMessage {

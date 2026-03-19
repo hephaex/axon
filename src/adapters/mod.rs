@@ -26,7 +26,9 @@ pub use claude::ClaudeAdapter;
 pub use gemini::GeminiAdapter;
 pub use ollama::OllamaAdapter;
 pub use openai::OpenAiAdapter;
-pub use streaming::{collect_stream, BoxStream, StreamChunk, StreamResult, StreamUsage, StreamingAdapter};
+pub use streaming::{
+    collect_stream, BoxStream, StreamChunk, StreamResult, StreamUsage, StreamingAdapter,
+};
 
 use async_trait::async_trait;
 

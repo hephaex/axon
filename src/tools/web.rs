@@ -110,10 +110,7 @@ impl Tool for WebFetchTool {
 
         self.validate_url(url)?;
 
-        let method = args
-            .get("method")
-            .and_then(|v| v.as_str())
-            .unwrap_or("GET");
+        let method = args.get("method").and_then(|v| v.as_str()).unwrap_or("GET");
 
         let mut request = match method.to_uppercase().as_str() {
             "GET" => self.client.get(url),
@@ -137,9 +134,10 @@ impl Tool for WebFetchTool {
             }
         }
 
-        let response = request.send().await.map_err(|e| {
-            AxonError::tool("web_fetch", format!("Request failed: {}", e))
-        })?;
+        let response = request
+            .send()
+            .await
+            .map_err(|e| AxonError::tool("web_fetch", format!("Request failed: {}", e)))?;
 
         let status = response.status();
         let content_length = response.content_length().unwrap_or(0) as usize;
@@ -155,9 +153,10 @@ impl Tool for WebFetchTool {
             });
         }
 
-        let body = response.text().await.map_err(|e| {
-            AxonError::tool("web_fetch", format!("Failed to read response: {}", e))
-        })?;
+        let body = response
+            .text()
+            .await
+            .map_err(|e| AxonError::tool("web_fetch", format!("Failed to read response: {}", e)))?;
 
         if body.len() > self.config.max_response_size {
             return Ok(ToolResult {

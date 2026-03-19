@@ -37,7 +37,10 @@ enum StreamEvent {
     ContentBlockStop { index: u32 },
 
     #[serde(rename = "message_delta")]
-    MessageDelta { delta: MessageDeltaInfo, usage: Usage },
+    MessageDelta {
+        delta: MessageDeltaInfo,
+        usage: Usage,
+    },
 
     #[serde(rename = "message_stop")]
     MessageStop,
@@ -246,4 +249,3 @@ impl StreamingAdapter for ClaudeAdapter {
         Ok(Box::pin(chunk_stream))
     }
 }
-

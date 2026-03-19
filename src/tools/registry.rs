@@ -75,9 +75,10 @@ impl ToolRegistry {
 
     /// Execute a tool by name with given arguments
     pub async fn execute(&self, name: &str, args: serde_json::Value) -> Result<ToolResult> {
-        let tool = self.get(name).await.ok_or_else(|| {
-            AxonError::tool(name, "Tool not found")
-        })?;
+        let tool = self
+            .get(name)
+            .await
+            .ok_or_else(|| AxonError::tool(name, "Tool not found"))?;
 
         // Validate arguments
         tool.validate(&args)?;
@@ -194,9 +195,7 @@ mod tests {
     async fn test_execute_unknown_tool() {
         let registry = ToolRegistry::new();
 
-        let result = registry
-            .execute("unknown", serde_json::json!({}))
-            .await;
+        let result = registry.execute("unknown", serde_json::json!({})).await;
 
         assert!(result.is_err());
     }

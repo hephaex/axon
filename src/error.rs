@@ -24,10 +24,7 @@ pub enum AxonError {
 
     /// Agent errors
     #[error("Agent error: {message}")]
-    Agent {
-        agent_id: String,
-        message: String,
-    },
+    Agent { agent_id: String, message: String },
 
     /// Router errors
     #[error("Router error: {0}")]
@@ -35,10 +32,7 @@ pub enum AxonError {
 
     /// Tool execution errors
     #[error("Tool error: {tool} - {message}")]
-    Tool {
-        tool: String,
-        message: String,
-    },
+    Tool { tool: String, message: String },
 
     /// Serialization/deserialization errors
     #[error("Serialization error: {0}")]
@@ -58,9 +52,7 @@ pub enum AxonError {
 
     /// Rate limit errors
     #[error("Rate limited: retry after {retry_after_secs} seconds")]
-    RateLimited {
-        retry_after_secs: u64,
-    },
+    RateLimited { retry_after_secs: u64 },
 
     /// Authentication errors
     #[error("Authentication failed: {0}")]
@@ -139,10 +131,7 @@ mod tests {
     #[test]
     fn test_agent_error() {
         let err = AxonError::agent("claude-1", "connection failed");
-        assert_eq!(
-            err.to_string(),
-            "Agent error: connection failed"
-        );
+        assert_eq!(err.to_string(), "Agent error: connection failed");
     }
 
     #[test]
@@ -162,7 +151,9 @@ mod tests {
 
     #[test]
     fn test_retry_after() {
-        let rate_limited = AxonError::RateLimited { retry_after_secs: 30 };
+        let rate_limited = AxonError::RateLimited {
+            retry_after_secs: 30,
+        };
         assert_eq!(rate_limited.retry_after(), Some(30));
 
         let config = AxonError::config("invalid");

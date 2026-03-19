@@ -23,22 +23,22 @@
 //! axon send --from claude --to gemini "Review this code"
 //! ```
 
-pub mod error;
-pub mod config;
-pub mod protocol;
 pub mod adapters;
+pub mod config;
+pub mod error;
+pub mod persistence;
+pub mod protocol;
 pub mod router;
+pub mod server;
 pub mod tools;
 pub mod utils;
-pub mod persistence;
-pub mod server;
 
 // Re-exports
+pub use adapters::{collect_stream, StreamChunk, StreamUsage, StreamingAdapter};
 pub use error::{AxonError, Result};
+pub use persistence::{ConversationStore, FileStore, MemoryStore};
 pub use protocol::{AgentConfig, AgentId, LlmMessage, MessageContent, MessageType, Provider};
 pub use router::{MessageRouter, RouterStats};
+pub use server::{start_server, ServerConfig, ServerState};
 pub use tools::{Tool, ToolDefinition, ToolRegistry, ToolResult};
 pub use utils::{retry_with_backoff, RateLimiter, RateLimiterRegistry, RetryConfig};
-pub use persistence::{ConversationStore, FileStore, MemoryStore};
-pub use adapters::{StreamChunk, StreamingAdapter, StreamUsage, collect_stream};
-pub use server::{ServerConfig, ServerState, start_server};

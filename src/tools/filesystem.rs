@@ -52,9 +52,9 @@ impl ReadFileTool {
         };
 
         // Security: ensure path is within base_dir
-        let canonical = full_path.canonicalize().map_err(|e| {
-            AxonError::tool("read_file", format!("Invalid path: {}", e))
-        })?;
+        let canonical = full_path
+            .canonicalize()
+            .map_err(|e| AxonError::tool("read_file", format!("Invalid path: {}", e)))?;
 
         if !canonical.starts_with(&self.config.base_dir) {
             return Err(AxonError::tool(
@@ -95,9 +95,9 @@ impl Tool for ReadFileTool {
         let resolved = self.resolve_path(path)?;
 
         // Check file size
-        let metadata = fs::metadata(&resolved).await.map_err(|e| {
-            AxonError::tool("read_file", format!("Cannot access file: {}", e))
-        })?;
+        let metadata = fs::metadata(&resolved)
+            .await
+            .map_err(|e| AxonError::tool("read_file", format!("Cannot access file: {}", e)))?;
 
         if metadata.len() as usize > self.config.max_read_size {
             return Ok(ToolResult {
@@ -111,9 +111,9 @@ impl Tool for ReadFileTool {
             });
         }
 
-        let content = fs::read_to_string(&resolved).await.map_err(|e| {
-            AxonError::tool("read_file", format!("Cannot read file: {}", e))
-        })?;
+        let content = fs::read_to_string(&resolved)
+            .await
+            .map_err(|e| AxonError::tool("read_file", format!("Cannot read file: {}", e)))?;
 
         Ok(ToolResult {
             success: true,
@@ -142,7 +142,10 @@ impl WriteFileTool {
 
     fn resolve_path(&self, path: &str) -> Result<PathBuf> {
         if !self.config.allow_write {
-            return Err(AxonError::tool("write_file", "Write operations not allowed"));
+            return Err(AxonError::tool(
+                "write_file",
+                "Write operations not allowed",
+            ));
         }
 
         let requested = Path::new(path);
@@ -214,9 +217,9 @@ impl Tool for WriteFileTool {
             })?;
         }
 
-        fs::write(&resolved, content).await.map_err(|e| {
-            AxonError::tool("write_file", format!("Cannot write file: {}", e))
-        })?;
+        fs::write(&resolved, content)
+            .await
+            .map_err(|e| AxonError::tool("write_file", format!("Cannot write file: {}", e)))?;
 
         Ok(ToolResult {
             success: true,
@@ -227,7 +230,10 @@ impl Tool for WriteFileTool {
 
     fn validate(&self, args: &serde_json::Value) -> Result<()> {
         if !self.config.allow_write {
-            return Err(AxonError::tool("write_file", "Write operations not allowed"));
+            return Err(AxonError::tool(
+                "write_file",
+                "Write operations not allowed",
+            ));
         }
         if args.get("path").and_then(|v| v.as_str()).is_none() {
             return Err(AxonError::tool("write_file", "Missing 'path' argument"));
@@ -257,9 +263,9 @@ impl ListDirTool {
             self.config.base_dir.join(requested)
         };
 
-        let canonical = full_path.canonicalize().map_err(|e| {
-            AxonError::tool("list_dir", format!("Invalid path: {}", e))
-        })?;
+        let canonical = full_path
+            .canonicalize()
+            .map_err(|e| AxonError::tool("list_dir", format!("Invalid path: {}", e)))?;
 
         if !canonical.starts_with(&self.config.base_dir) {
             return Err(AxonError::tool(
@@ -299,14 +305,16 @@ impl Tool for ListDirTool {
 
         let resolved = self.resolve_path(path)?;
 
-        let mut entries = fs::read_dir(&resolved).await.map_err(|e| {
-            AxonError::tool("list_dir", format!("Cannot read directory: {}", e))
-        })?;
+        let mut entries = fs::read_dir(&resolved)
+            .await
+            .map_err(|e| AxonError::tool("list_dir", format!("Cannot read directory: {}", e)))?;
 
         let mut items = Vec::new();
-        while let Some(entry) = entries.next_entry().await.map_err(|e| {
-            AxonError::tool("list_dir", format!("Error reading entry: {}", e))
-        })? {
+        while let Some(entry) = entries
+            .next_entry()
+            .await
+            .map_err(|e| AxonError::tool("list_dir", format!("Error reading entry: {}", e)))?
+        {
             let file_type = entry.file_type().await.ok();
             let type_str = match file_type {
                 Some(ft) if ft.is_dir() => "dir",
@@ -314,7 +322,11 @@ impl Tool for ListDirTool {
                 Some(ft) if ft.is_symlink() => "link",
                 _ => "unknown",
             };
-            items.push(format!("{}\t{}", type_str, entry.file_name().to_string_lossy()));
+            items.push(format!(
+                "{}\t{}",
+                type_str,
+                entry.file_name().to_string_lossy()
+            ));
         }
 
         items.sort();
@@ -335,10 +347,7 @@ impl Tool for ListDirTool {
 }
 
 /// Register all filesystem tools with a registry
-pub async fn register_filesystem_tools(
-    registry: &super::ToolRegistry,
-    config: FilesystemConfig,
-) {
+pub async fn register_filesystem_tools(registry: &super::ToolRegistry, config: FilesystemConfig) {
     registry.register(ReadFileTool::new(config.clone())).await;
     registry.register(ListDirTool::new(config.clone())).await;
     if config.allow_write {
@@ -353,7 +362,10 @@ mod tests {
 
     fn test_config(temp_dir: &TempDir) -> FilesystemConfig {
         // Use canonical path to handle macOS /var -> /private/var symlink
-        let base_dir = temp_dir.path().canonicalize().unwrap_or_else(|_| temp_dir.path().to_path_buf());
+        let base_dir = temp_dir
+            .path()
+            .canonicalize()
+            .unwrap_or_else(|_| temp_dir.path().to_path_buf());
         FilesystemConfig {
             base_dir,
             allow_write: true,

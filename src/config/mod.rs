@@ -39,9 +39,15 @@ pub struct ServerConfig {
     pub log_level: String,
 }
 
-fn default_port() -> u16 { 8090 }
-fn default_host() -> String { "127.0.0.1".to_string() }
-fn default_log_level() -> String { "info".to_string() }
+fn default_port() -> u16 {
+    8090
+}
+fn default_host() -> String {
+    "127.0.0.1".to_string()
+}
+fn default_log_level() -> String {
+    "info".to_string()
+}
 
 impl Default for ServerConfig {
     fn default() -> Self {
@@ -84,15 +90,14 @@ impl Config {
     pub fn load(path: Option<&str>) -> crate::Result<Self> {
         let config_path = path
             .map(std::path::PathBuf::from)
-            .or_else(|| {
-                dirs::home_dir().map(|h| h.join(".axon").join("config.toml"))
-            });
+            .or_else(|| dirs::home_dir().map(|h| h.join(".axon").join("config.toml")));
 
         if let Some(path) = config_path {
             if path.exists() {
                 let content = std::fs::read_to_string(&path)?;
-                let config: Config = toml::from_str(&content)
-                    .map_err(|e| crate::AxonError::config(format!("Failed to parse config: {}", e)))?;
+                let config: Config = toml::from_str(&content).map_err(|e| {
+                    crate::AxonError::config(format!("Failed to parse config: {}", e))
+                })?;
                 return Ok(config);
             }
         }

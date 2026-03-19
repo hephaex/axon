@@ -172,7 +172,10 @@ mod tests {
 
     #[test]
     fn test_provider_from_str() {
-        assert_eq!("anthropic".parse::<Provider>().unwrap(), Provider::Anthropic);
+        assert_eq!(
+            "anthropic".parse::<Provider>().unwrap(),
+            Provider::Anthropic
+        );
         assert_eq!("claude".parse::<Provider>().unwrap(), Provider::Anthropic);
         assert_eq!("google".parse::<Provider>().unwrap(), Provider::Google);
         assert_eq!("gemini".parse::<Provider>().unwrap(), Provider::Google);
@@ -202,6 +205,9 @@ mod tests {
 
         assert_eq!(deserialized.id.as_str(), "test");
         assert_eq!(deserialized.provider, Provider::Ollama);
-        assert_eq!(deserialized.endpoint, Some("http://localhost:11434".to_string()));
+        assert_eq!(
+            deserialized.endpoint,
+            Some("http://localhost:11434".to_string())
+        );
     }
 }

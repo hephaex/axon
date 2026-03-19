@@ -50,9 +50,7 @@ pub enum WsResponse {
         usage: Option<WsUsage>,
     },
     /// Error response
-    Error {
-        message: String,
-    },
+    Error { message: String },
     /// Pong response
     Pong,
 }
@@ -65,10 +63,7 @@ pub struct WsUsage {
 }
 
 /// WebSocket upgrade handler
-pub async fn ws_handler(
-    ws: WebSocketUpgrade,
-    State(state): State<ServerState>,
-) -> Response {
+pub async fn ws_handler(ws: WebSocketUpgrade, State(state): State<ServerState>) -> Response {
     ws.on_upgrade(move |socket| handle_socket(socket, state))
 }
 
@@ -134,9 +129,10 @@ async fn handle_message(
             let target_id: AgentId = to.clone().into();
 
             // Get the adapter
-            let adapter = state.get_adapter(&target_id).await.ok_or_else(|| {
-                crate::error::AxonError::agent(&to, "Agent not found")
-            })?;
+            let adapter = state
+                .get_adapter(&target_id)
+                .await
+                .ok_or_else(|| crate::error::AxonError::agent(&to, "Agent not found"))?;
 
             // Create the message
             let message =
@@ -233,7 +229,10 @@ mod tests {
             "content": "Hello"
         }"#;
         let req: WsRequest = serde_json::from_str(json).unwrap();
-        if let WsRequest::SendStream { from, to, content, .. } = req {
+        if let WsRequest::SendStream {
+            from, to, content, ..
+        } = req
+        {
             assert_eq!(from, "user");
             assert_eq!(to, "claude");
             assert_eq!(content, "Hello");

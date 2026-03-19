@@ -51,7 +51,11 @@ impl OllamaAdapter {
     }
 
     /// Convert LlmMessage to Ollama request format
-    pub(crate) fn to_ollama_request(&self, message: &LlmMessage, history: &[LlmMessage]) -> OllamaRequest {
+    pub(crate) fn to_ollama_request(
+        &self,
+        message: &LlmMessage,
+        history: &[LlmMessage],
+    ) -> OllamaRequest {
         let mut messages = Vec::new();
 
         // Add system prompt if set

@@ -5,9 +5,9 @@
 use axon::adapters::{ClaudeAdapter, LlmAdapter};
 use axon::protocol::{AgentConfig, Conversation, LlmMessage, Provider, TurnPolicy};
 use axon::router::MessageRouter;
-use axon::server::{ServerConfig, ServerState, start_server};
-use axon::tools::{MinkyConfig, ToolRegistry};
+use axon::server::{start_server, ServerConfig, ServerState};
 use axon::tools::minky::register_minky_tools;
+use axon::tools::{MinkyConfig, ToolRegistry};
 use clap::{Parser, Subcommand};
 use std::io::{self, Read as IoRead};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
@@ -187,7 +187,11 @@ async fn main() -> anyhow::Result<()> {
 
             // For MVP, we support Claude adapter only
             // TODO: Support other providers via config
-            let config = AgentConfig::new(from.as_str(), Provider::Anthropic, "claude-sonnet-4-20250514");
+            let config = AgentConfig::new(
+                from.as_str(),
+                Provider::Anthropic,
+                "claude-sonnet-4-20250514",
+            );
 
             let adapter: ClaudeAdapter = match ClaudeAdapter::new(config) {
                 Ok(a) => a,
@@ -202,7 +206,8 @@ async fn main() -> anyhow::Result<()> {
             let conv_id = Uuid::new_v4();
 
             // Build message (user → agent)
-            let llm_message = LlmMessage::chat("user", Some(from.as_str().into()), &message, conv_id);
+            let llm_message =
+                LlmMessage::chat("user", Some(from.as_str().into()), &message, conv_id);
 
             // Send message and get response
             match adapter.process(&llm_message).await {
@@ -216,7 +221,11 @@ async fn main() -> anyhow::Result<()> {
             }
         }
 
-        Commands::Converse { agents, topic, max_turns } => {
+        Commands::Converse {
+            agents,
+            topic,
+            max_turns,
+        } => {
             tracing::info!("Starting conversation with agents: {}", agents);
 
             // Parse agent list
@@ -230,11 +239,8 @@ async fn main() -> anyhow::Result<()> {
             let router = MessageRouter::new();
 
             for agent_name in &agent_list {
-                let config = AgentConfig::new(
-                    *agent_name,
-                    Provider::Anthropic,
-                    "claude-sonnet-4-20250514",
-                );
+                let config =
+                    AgentConfig::new(*agent_name, Provider::Anthropic, "claude-sonnet-4-20250514");
 
                 match ClaudeAdapter::new(config) {
                     Ok(adapter) => {
@@ -249,12 +255,11 @@ async fn main() -> anyhow::Result<()> {
             }
 
             // Create conversation
-            let mut conversation = Conversation::new(
-                agent_list.iter().map(|s| (*s).into()).collect()
-            )
-            .with_topic(&topic)
-            .with_turn_policy(TurnPolicy::RoundRobin)
-            .with_max_turns(max_turns);
+            let mut conversation =
+                Conversation::new(agent_list.iter().map(|s| (*s).into()).collect())
+                    .with_topic(&topic)
+                    .with_turn_policy(TurnPolicy::RoundRobin)
+                    .with_max_turns(max_turns);
 
             println!("=== Conversation: {} ===\n", topic);
 
@@ -269,7 +274,11 @@ async fn main() -> anyhow::Result<()> {
             // First turn
             match router.send(initial_message.clone()).await {
                 Ok(response) => {
-                    println!("[{}]: {}\n", response.from.as_str(), response.content.as_text());
+                    println!(
+                        "[{}]: {}\n",
+                        response.from.as_str(),
+                        response.content.as_text()
+                    );
                     conversation.add_message(response.clone());
 
                     // Continue conversation loop
@@ -293,7 +302,11 @@ async fn main() -> anyhow::Result<()> {
                         // Update conversation and get response
                         match router.send(msg).await {
                             Ok(response) => {
-                                println!("[{}]: {}\n", response.from.as_str(), response.content.as_text());
+                                println!(
+                                    "[{}]: {}\n",
+                                    response.from.as_str(),
+                                    response.content.as_text()
+                                );
                                 conversation.add_message(response.clone());
                                 current_message = response;
                             }
@@ -304,7 +317,10 @@ async fn main() -> anyhow::Result<()> {
                         }
                     }
 
-                    println!("=== Conversation ended after {} turns ===", conversation.current_turn);
+                    println!(
+                        "=== Conversation ended after {} turns ===",
+                        conversation.current_turn
+                    );
                 }
                 Err(e) => {
                     eprintln!("Error starting conversation: {}", e);
@@ -357,15 +373,15 @@ async fn main() -> anyhow::Result<()> {
                 let total_stages = stages.len();
 
                 if cli.verbose {
-                    eprintln!("[{}/{}] Processing with {}...", stage_num, total_stages, agent_name);
+                    eprintln!(
+                        "[{}/{}] Processing with {}...",
+                        stage_num, total_stages, agent_name
+                    );
                 }
 
                 // Create adapter
-                let config = AgentConfig::new(
-                    *agent_name,
-                    Provider::Anthropic,
-                    "claude-sonnet-4-20250514",
-                );
+                let config =
+                    AgentConfig::new(*agent_name, Provider::Anthropic, "claude-sonnet-4-20250514");
 
                 let adapter: ClaudeAdapter = match ClaudeAdapter::new(config) {
                     Ok(a) => a,
@@ -404,9 +420,17 @@ async fn main() -> anyhow::Result<()> {
         }
 
         Commands::Agent { action } => match action {
-            AgentAction::Add { name, provider, model, endpoint } => {
+            AgentAction::Add {
+                name,
+                provider,
+                model,
+                endpoint,
+            } => {
                 tracing::info!("Adding agent: {}", name);
-                println!("Adding agent '{}' (provider: {}, model: {})", name, provider, model);
+                println!(
+                    "Adding agent '{}' (provider: {}, model: {})",
+                    name, provider, model
+                );
                 if let Some(ep) = endpoint {
                     println!("  Endpoint: {}", ep);
                 }

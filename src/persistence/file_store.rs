@@ -54,7 +54,8 @@ impl FileStore {
     ///
     /// Uses `~/.axon/conversations/`
     pub async fn default_location() -> Result<Self> {
-        let home = dirs::home_dir().ok_or_else(|| AxonError::config("Cannot find home directory"))?;
+        let home =
+            dirs::home_dir().ok_or_else(|| AxonError::config("Cannot find home directory"))?;
         let path = home.join(".axon").join("conversations");
         Self::new(path).await
     }

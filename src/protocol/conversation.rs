@@ -116,9 +116,7 @@ impl Conversation {
             TurnPolicy::LastSpeakerExcluded => {
                 // Get last speaker and return someone else
                 if let Some(last_msg) = self.messages.last() {
-                    self.participants
-                        .iter()
-                        .find(|p| *p != &last_msg.from)
+                    self.participants.iter().find(|p| *p != &last_msg.from)
                 } else {
                     self.participants.first()
                 }
@@ -138,16 +136,10 @@ impl Conversation {
         }
 
         match &self.turn_policy {
-            TurnPolicy::RoundRobin => {
-                self.get_next_speaker() == Some(agent)
-            }
-            TurnPolicy::Directed => {
-                self.next_speaker.as_ref() == Some(agent)
-            }
+            TurnPolicy::RoundRobin => self.get_next_speaker() == Some(agent),
+            TurnPolicy::Directed => self.next_speaker.as_ref() == Some(agent),
             TurnPolicy::Free => true,
-            TurnPolicy::LastSpeakerExcluded => {
-                self.messages.last().map(|m| &m.from) != Some(agent)
-            }
+            TurnPolicy::LastSpeakerExcluded => self.messages.last().map(|m| &m.from) != Some(agent),
         }
     }
 
@@ -224,9 +216,7 @@ pub enum ConversationStatus {
     Paused,
 
     /// Conversation has ended
-    Ended {
-        reason: ConversationEndReason,
-    },
+    Ended { reason: ConversationEndReason },
 }
 
 /// Reason for conversation ending
@@ -299,8 +289,7 @@ impl ConversationBuilder {
 
     /// Build the conversation
     pub fn build(self) -> Conversation {
-        let mut conv = Conversation::new(self.participants)
-            .with_turn_policy(self.turn_policy);
+        let mut conv = Conversation::new(self.participants).with_turn_policy(self.turn_policy);
 
         if let Some(topic) = self.topic {
             conv = conv.with_topic(topic);
@@ -330,8 +319,7 @@ mod tests {
 
     #[test]
     fn test_conversation_with_topic() {
-        let conv = Conversation::new(vec![AgentId::new("claude")])
-            .with_topic("Code Review");
+        let conv = Conversation::new(vec![AgentId::new("claude")]).with_topic("Code Review");
 
         assert_eq!(conv.topic, Some("Code Review".to_string()));
     }
@@ -358,8 +346,7 @@ mod tests {
     #[test]
     fn test_directed_policy() {
         let agents = vec![AgentId::new("claude"), AgentId::new("gemini")];
-        let mut conv = Conversation::new(agents)
-            .with_turn_policy(TurnPolicy::Directed);
+        let mut conv = Conversation::new(agents).with_turn_policy(TurnPolicy::Directed);
 
         // No next speaker initially
         assert!(conv.get_next_speaker().is_none());
@@ -372,8 +359,7 @@ mod tests {
     #[test]
     fn test_free_policy() {
         let agents = vec![AgentId::new("claude"), AgentId::new("gemini")];
-        let conv = Conversation::new(agents.clone())
-            .with_turn_policy(TurnPolicy::Free);
+        let conv = Conversation::new(agents.clone()).with_turn_policy(TurnPolicy::Free);
 
         // Anyone can speak
         assert!(conv.can_speak(&agents[0]));
@@ -383,8 +369,7 @@ mod tests {
     #[test]
     fn test_max_turns() {
         let agents = vec![AgentId::new("claude")];
-        let mut conv = Conversation::new(agents.clone())
-            .with_max_turns(2);
+        let mut conv = Conversation::new(agents.clone()).with_max_turns(2);
 
         let msg1 = LlmMessage::chat("claude", None, "Message 1", conv.id);
         conv.add_message(msg1);
@@ -395,7 +380,9 @@ mod tests {
         assert!(!conv.is_active());
         assert!(matches!(
             conv.status,
-            ConversationStatus::Ended { reason: ConversationEndReason::MaxTurnsReached }
+            ConversationStatus::Ended {
+                reason: ConversationEndReason::MaxTurnsReached
+            }
         ));
     }
 
@@ -417,10 +404,7 @@ mod tests {
 
     #[test]
     fn test_messages_from_agent() {
-        let mut conv = Conversation::new(vec![
-            AgentId::new("claude"),
-            AgentId::new("gemini"),
-        ]);
+        let mut conv = Conversation::new(vec![AgentId::new("claude"), AgentId::new("gemini")]);
 
         conv.add_message(LlmMessage::chat("claude", None, "Hello", conv.id));
         conv.add_message(LlmMessage::chat("gemini", None, "Hi", conv.id));

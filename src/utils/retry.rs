@@ -78,8 +78,8 @@ impl RetryConfig {
 
     /// Calculate delay for a given attempt number
     fn calculate_delay(&self, attempt: u32) -> Duration {
-        let base_delay = self.initial_delay.as_millis() as f64
-            * self.backoff_multiplier.powi(attempt as i32);
+        let base_delay =
+            self.initial_delay.as_millis() as f64 * self.backoff_multiplier.powi(attempt as i32);
 
         let delay_ms = base_delay.min(self.max_delay.as_millis() as f64);
 

@@ -124,8 +124,6 @@ mod tests {
 
     #[tokio::test]
     async fn test_adapter_registration() {
-        use crate::protocol::{AgentConfig, Provider};
-
         let state = ServerState::new();
 
         // We can't easily create an adapter without API keys, so just test the structure

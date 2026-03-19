@@ -115,22 +115,27 @@ impl MinkyClient {
             request = request.json(&body);
         }
 
-        let response = request.send().await.map_err(|e| {
-            AxonError::tool("minky", format!("Request failed: {}", e))
-        })?;
+        let response = request
+            .send()
+            .await
+            .map_err(|e| AxonError::tool("minky", format!("Request failed: {}", e)))?;
 
         if !response.status().is_success() {
             let status = response.status();
-            let error_text = response.text().await.unwrap_or_else(|_| "Unknown error".to_string());
+            let error_text = response
+                .text()
+                .await
+                .unwrap_or_else(|_| "Unknown error".to_string());
             return Err(AxonError::tool(
                 "minky",
                 format!("API error ({}): {}", status, error_text),
             ));
         }
 
-        response.json().await.map_err(|e| {
-            AxonError::tool("minky", format!("Failed to parse response: {}", e))
-        })
+        response
+            .json()
+            .await
+            .map_err(|e| AxonError::tool("minky", format!("Failed to parse response: {}", e)))
     }
 }
 
@@ -188,10 +193,7 @@ impl Tool for MinkySearchTool {
             .and_then(|v| v.as_str())
             .unwrap_or("hybrid");
 
-        let limit = args
-            .get("limit")
-            .and_then(|v| v.as_i64())
-            .unwrap_or(5) as usize;
+        let limit = args.get("limit").and_then(|v| v.as_i64()).unwrap_or(5) as usize;
 
         let body = serde_json::json!({
             "query": query,
@@ -253,7 +255,9 @@ impl Tool for MinkyAskTool {
     fn definition(&self) -> ToolDefinition {
         ToolDefinition {
             name: "minky_ask".to_string(),
-            description: "Ask a question and get an AI-generated answer based on the knowledge base".to_string(),
+            description:
+                "Ask a question and get an AI-generated answer based on the knowledge base"
+                    .to_string(),
             parameters: serde_json::json!({
                 "type": "object",
                 "properties": {
@@ -391,7 +395,9 @@ pub async fn register_minky_tools(
     registry: &super::ToolRegistry,
     config: MinkyConfig,
 ) -> Result<()> {
-    registry.register(MinkySearchTool::new(config.clone())?).await;
+    registry
+        .register(MinkySearchTool::new(config.clone())?)
+        .await;
     registry.register(MinkyAskTool::new(config.clone())?).await;
     registry.register(MinkyGetTool::new(config)?).await;
     Ok(())
@@ -410,8 +416,7 @@ mod tests {
 
     #[test]
     fn test_minky_config_builder() {
-        let config = MinkyConfig::new("https://minky.example.com/api")
-            .with_api_key("secret-key");
+        let config = MinkyConfig::new("https://minky.example.com/api").with_api_key("secret-key");
 
         assert_eq!(config.endpoint, "https://minky.example.com/api");
         assert_eq!(config.api_key, Some("secret-key".to_string()));

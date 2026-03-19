@@ -5,13 +5,13 @@
 //! - `FilesystemTool` - File operations
 //! - `WebTool` - Web fetch
 
-pub mod registry;
 pub mod filesystem;
-pub mod web;
 pub mod minky;
+pub mod registry;
+pub mod web;
 
-pub use registry::{Tool, ToolRegistry};
 pub use minky::MinkyConfig;
+pub use registry::{Tool, ToolRegistry};
 
 use serde::{Deserialize, Serialize};
 

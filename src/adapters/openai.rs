@@ -45,10 +45,7 @@ impl OpenAiAdapter {
 
     /// Get API key from environment
     fn get_api_key(config: &AgentConfig) -> Result<String> {
-        let env_var = config
-            .api_key_env
-            .as_deref()
-            .unwrap_or("OPENAI_API_KEY");
+        let env_var = config.api_key_env.as_deref().unwrap_or("OPENAI_API_KEY");
 
         let api_key = std::env::var(env_var).map_err(|_| {
             AxonError::config(format!(
@@ -69,14 +66,15 @@ impl OpenAiAdapter {
 
     /// Get API URL (supports custom endpoint for Azure, etc.)
     pub(crate) fn get_api_url(&self) -> &str {
-        self.config
-            .endpoint
-            .as_deref()
-            .unwrap_or(OPENAI_API_URL)
+        self.config.endpoint.as_deref().unwrap_or(OPENAI_API_URL)
     }
 
     /// Convert LlmMessage to OpenAI request format
-    pub(crate) fn to_openai_request(&self, message: &LlmMessage, history: &[LlmMessage]) -> OpenAiRequest {
+    pub(crate) fn to_openai_request(
+        &self,
+        message: &LlmMessage,
+        history: &[LlmMessage],
+    ) -> OpenAiRequest {
         let mut messages = Vec::new();
 
         // Add system prompt if set

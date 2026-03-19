@@ -45,10 +45,7 @@ impl GeminiAdapter {
 
     /// Get API key from environment
     fn get_api_key(config: &AgentConfig) -> Result<String> {
-        let env_var = config
-            .api_key_env
-            .as_deref()
-            .unwrap_or("GOOGLE_API_KEY");
+        let env_var = config.api_key_env.as_deref().unwrap_or("GOOGLE_API_KEY");
 
         let api_key = std::env::var(env_var).map_err(|_| {
             AxonError::config(format!(
@@ -76,7 +73,11 @@ impl GeminiAdapter {
     }
 
     /// Convert LlmMessage to Gemini request format
-    pub(crate) fn to_gemini_request(&self, message: &LlmMessage, history: &[LlmMessage]) -> GeminiRequest {
+    pub(crate) fn to_gemini_request(
+        &self,
+        message: &LlmMessage,
+        history: &[LlmMessage],
+    ) -> GeminiRequest {
         let mut contents = Vec::new();
 
         // Add history
@@ -115,9 +116,13 @@ impl GeminiAdapter {
         GeminiRequest {
             contents,
             generation_config: Some(generation_config),
-            system_instruction: self.config.system_prompt.as_ref().map(|s| SystemInstruction {
-                parts: vec![Part::Text { text: s.clone() }],
-            }),
+            system_instruction: self
+                .config
+                .system_prompt
+                .as_ref()
+                .map(|s| SystemInstruction {
+                    parts: vec![Part::Text { text: s.clone() }],
+                }),
             tools,
         }
     }
@@ -137,20 +142,22 @@ impl GeminiAdapter {
                     text: value.to_string(),
                 }]
             }
-            MessageContent::Parts(parts) => {
-                parts
-                    .iter()
-                    .map(|p| match p {
-                        crate::protocol::ContentPart::Text { text } => Part::Text { text: text.clone() },
-                        crate::protocol::ContentPart::Image { base64, media_type, .. } => {
-                            Part::InlineData {
-                                mime_type: media_type.clone().unwrap_or_else(|| "image/png".to_string()),
-                                data: base64.clone().unwrap_or_default(),
-                            }
-                        }
-                    })
-                    .collect()
-            }
+            MessageContent::Parts(parts) => parts
+                .iter()
+                .map(|p| match p {
+                    crate::protocol::ContentPart::Text { text } => {
+                        Part::Text { text: text.clone() }
+                    }
+                    crate::protocol::ContentPart::Image {
+                        base64, media_type, ..
+                    } => Part::InlineData {
+                        mime_type: media_type
+                            .clone()
+                            .unwrap_or_else(|| "image/png".to_string()),
+                        data: base64.clone().unwrap_or_default(),
+                    },
+                })
+                .collect(),
         };
 
         Content {

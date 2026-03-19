@@ -112,9 +112,7 @@ impl LlmMessage {
             id: Uuid::new_v4(),
             from: from.into(),
             to: Some(to.into()),
-            message_type: MessageType::Delegate {
-                task: task.into(),
-            },
+            message_type: MessageType::Delegate { task: task.into() },
             content: MessageContent::Json(context),
             conversation_id,
             timestamp: Utc::now(),
@@ -152,9 +150,7 @@ impl LlmMessage {
             id: Uuid::new_v4(),
             from: from.into(),
             to: None,
-            message_type: MessageType::Error {
-                code: code.into(),
-            },
+            message_type: MessageType::Error { code: code.into() },
             content: MessageContent::Text(message.into()),
             conversation_id,
             timestamp: Utc::now(),
@@ -413,8 +409,12 @@ mod tests {
         assert!(json.as_json().is_some());
 
         let parts = MessageContent::Parts(vec![
-            ContentPart::Text { text: "part1".to_string() },
-            ContentPart::Text { text: "part2".to_string() },
+            ContentPart::Text {
+                text: "part1".to_string(),
+            },
+            ContentPart::Text {
+                text: "part2".to_string(),
+            },
         ]);
         assert_eq!(parts.as_text(), "part1\npart2");
     }

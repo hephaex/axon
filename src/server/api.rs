@@ -146,10 +146,7 @@ async fn send_message(
         } else {
             return (
                 StatusCode::NOT_FOUND,
-                Json(ApiResponse::err(format!(
-                    "Agent '{}' not found",
-                    target_id
-                ))),
+                Json(ApiResponse::err(format!("Agent '{}' not found", target_id))),
             );
         }
     } else {

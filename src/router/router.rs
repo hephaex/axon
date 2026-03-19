@@ -121,9 +121,9 @@ impl MessageRouter {
     async fn send_to_agent(&self, to: &AgentId, message: &LlmMessage) -> Result<LlmMessage> {
         let adapters = self.adapters.read().await;
 
-        let adapter = adapters.get(to.as_str()).ok_or_else(|| {
-            AxonError::agent(to.as_str(), "Target agent not registered")
-        })?;
+        let adapter = adapters
+            .get(to.as_str())
+            .ok_or_else(|| AxonError::agent(to.as_str(), "Target agent not registered"))?;
 
         // Get conversation history
         let conversations = self.conversations.read().await;
@@ -152,7 +152,9 @@ impl MessageRouter {
             }
         }
 
-        Err(AxonError::Router("No available agents for broadcast".into()))
+        Err(AxonError::Router(
+            "No available agents for broadcast".into(),
+        ))
     }
 
     /// Queue a message for async processing

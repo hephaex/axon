@@ -154,8 +154,8 @@ mod tests {
 
     #[tokio::test]
     async fn test_collect_stream() {
-        use async_stream::stream;
         use crate::protocol::AgentId;
+        use async_stream::stream;
 
         let conv_id = Uuid::new_v4();
         let from: AgentId = "test-agent".into();
