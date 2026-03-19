@@ -52,7 +52,11 @@ secrecy = { version = "0.10", features = ["serde"] }
 # Directories
 dirs = "6"
 
+# URL parsing
+url = "2"
+
 [dev-dependencies]
+tempfile = "3"
 tokio-test = "0.4"
 pretty_assertions = "1"
 mockito = "1"

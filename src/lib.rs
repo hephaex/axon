@@ -34,3 +34,4 @@ pub mod tools;
 pub use error::{AxonError, Result};
 pub use protocol::{AgentConfig, AgentId, LlmMessage, MessageContent, MessageType, Provider};
 pub use router::{MessageRouter, RouterStats};
+pub use tools::{Tool, ToolDefinition, ToolRegistry, ToolResult};
