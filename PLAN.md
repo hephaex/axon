@@ -17,11 +17,11 @@
 - [x] `AgentId` 구조체
 - [x] Serialization 테스트 (14개 테스트)
 
-### 1.3 CLI 기본 구조 (스켈레톤 완료)
-- [x] `axon serve` - 라우터 서버 시작 (스켈레톤)
-- [x] `axon send` - 단일 메시지 전송 (스켈레톤)
-- [x] `axon agent add/list/remove` - 에이전트 관리 (스켈레톤)
-- [ ] 실제 기능 구현
+### 1.3 CLI 기본 구조 ✅
+- [x] `axon serve` - 라우터 서버 시작
+- [x] `axon send` - 단일 메시지 전송
+- [x] `axon agent add/list/remove` - 에이전트 관리
+- [x] 실제 기능 구현 (Phase 2.3, 5.3)
 
 ### 1.4 Claude Adapter ✅
 - [x] Anthropic API 클라이언트
@@ -139,12 +139,25 @@
 
 ---
 
-## 다음 작업
+## 다음 작업 (Optional)
 
-1. `axon pipe` CLI 파이프라인 모드 구현
-2. Phase 3 Tool Integration 시작
-3. 추가 LLM Adapters (Gemini, OpenAI, Ollama)
+1. Shell command 도구 구현 (Phase 3.3)
+2. `--tools` 옵션으로 대화에 도구 연결 (Phase 3.4)
+3. CLI 스트리밍 출력 (`axon send --stream` 옵션)
+4. 프로덕션 배포 준비 (Docker, 설정 파일)
 
 ---
 
-*Last updated: 2026-03-19*
+## 완료 현황
+
+| Phase | 상태 | 완료일 |
+|-------|------|--------|
+| Phase 1: Core Protocol & CLI | ✅ 완료 | Week 1 |
+| Phase 2: Multi-Agent Conversation | ✅ 완료 | Week 2 |
+| Phase 3: Tool Integration | ✅ 완료 | Week 3 |
+| Phase 4: Additional Adapters | ✅ 완료 | Week 4 |
+| Phase 5: Advanced Features | ✅ 완료 | Week 5 |
+
+---
+
+*Last updated: 2026-03-20*
