@@ -6,8 +6,8 @@
 
 ## 현재 상태
 
-**Phase**: 1 - Core Protocol & CLI (MVP)
-**상태**: 🟢 Phase 1.4 완료, Phase 2 진행 예정
+**Phase**: 2 - Multi-Agent Conversation
+**상태**: 🟢 Phase 2.2 완료 (Conversation + Router)
 
 ---
 
@@ -46,26 +46,50 @@
 - [x] Tool calling 지원
 - [x] AdapterBuilder 구현
 
+#### Phase 2.1: Conversation Model ✅
+- [x] Conversation 구조체 (`src/protocol/conversation.rs`)
+- [x] TurnPolicy enum (RoundRobin, Directed, Free, LastSpeakerExcluded)
+- [x] ConversationStatus, ConversationEndReason enum
+- [x] ConversationBuilder 패턴
+- [x] 테스트 9개 통과
+
+#### Phase 2.2: Message Router ✅
+- [x] MessageRouter 구현 (`src/router/router.rs`)
+- [x] tokio mpsc 메시지 큐
+- [x] 라우팅 로직 (send, broadcast)
+- [x] Agent 등록/해제/조회
+- [x] Conversation 관리
+- [x] RouterStats 통계
+- [x] 테스트 6개 통과
+
 ---
 
 ## 진행 중인 작업
 
-### Phase 2.1: Conversation Orchestrator
-- [ ] Conversation 상태 관리
-- [ ] Turn policy (RoundRobin, Directed, Free)
+### Phase 2.3: CLI 실제 기능 구현
+- [ ] `axon send` 실제 기능
+- [ ] `axon converse` 멀티 에이전트 대화
 
 ---
 
 ## 다음 작업
 
-1. Conversation 모델 구현 (`src/protocol/conversation.rs`)
-2. MessageRouter 구현 (`src/router/router.rs`)
-3. axon send 실제 기능 구현
-4. axon converse 구현
+1. axon send 실제 기능 구현
+2. axon converse 구현
+3. Phase 3 Tool Integration
 
 ---
 
 ## 세션 로그
+
+### 2026-03-19 Session 3
+- Phase 2.1 Conversation Model 구현 완료
+- Conversation, TurnPolicy, ConversationStatus 구현
+- ConversationBuilder 패턴 적용
+- Phase 2.2 MessageRouter 구현 완료
+- tokio mpsc 기반 메시지 큐
+- Agent 등록/해제/라우팅 로직
+- 41개 테스트 통과
 
 ### 2026-03-19 Session 2
 - Phase 1.2 Message Protocol 구현 완료
@@ -83,4 +107,4 @@
 
 ---
 
-*Last updated: 2026-03-10*
+*Last updated: 2026-03-19*

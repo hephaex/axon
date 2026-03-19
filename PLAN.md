@@ -33,19 +33,25 @@
 
 ## Phase 2: Multi-Agent Conversation
 
-### 2.1 Conversation Orchestrator
-- [ ] Conversation 상태 관리
-- [ ] Turn policy (RoundRobin, Directed, Free)
-- [ ] 대화 종료 조건
+### 2.1 Conversation Model ✅
+- [x] Conversation 상태 관리
+- [x] Turn policy (RoundRobin, Directed, Free, LastSpeakerExcluded)
+- [x] 대화 종료 조건 (MaxTurns, AgentRequested, Timeout 등)
+- [x] ConversationBuilder 패턴
+- [x] 테스트 9개
 
-### 2.2 Message Router
-- [ ] 메시지 큐 (tokio mpsc)
-- [ ] 라우팅 로직
-- [ ] Broadcast 지원
+### 2.2 Message Router ✅
+- [x] 메시지 큐 (tokio mpsc)
+- [x] 라우팅 로직 (send, broadcast)
+- [x] Agent 등록/해제
+- [x] Conversation 관리
+- [x] RouterStats 통계
+- [x] 테스트 6개
 
 ### 2.3 CLI 확장
 - [ ] `axon converse` - 멀티 에이전트 대화
 - [ ] `axon pipe` - 파이프라인 모드
+- [ ] `axon send` 실제 기능 구현
 
 ---
 
@@ -124,11 +130,10 @@
 
 ## 다음 작업
 
-1. Cargo.toml 생성
-2. 기본 디렉토리 구조 생성
-3. Message protocol 구현
-4. Claude adapter MVP
+1. `axon send` CLI 실제 기능 구현
+2. `axon converse` CLI 멀티 에이전트 대화
+3. Phase 3 Tool Integration 시작
 
 ---
 
-*Last updated: 2026-03-10*
+*Last updated: 2026-03-19*

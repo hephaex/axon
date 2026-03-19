@@ -5,7 +5,6 @@
 //! - `ConversationOrchestrator` - Manages multi-agent conversations
 //! - `MessageQueue` - Async message queue
 
-// TODO: Implement router
-// pub mod router;
-// pub mod orchestrator;
-// pub mod queue;
+pub mod router;
+
+pub use router::{MessageRouter, RouterStats};

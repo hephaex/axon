@@ -7,8 +7,12 @@
 //! - `Conversation` - Conversation state
 
 pub mod agent;
+pub mod conversation;
 pub mod message;
 
 // Re-exports for convenience
 pub use agent::{AgentConfig, AgentId, Provider};
+pub use conversation::{
+    Conversation, ConversationBuilder, ConversationEndReason, ConversationStatus, TurnPolicy,
+};
 pub use message::{ContentPart, LlmMessage, MessageContent, MessageType};

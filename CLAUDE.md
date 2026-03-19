@@ -15,17 +15,17 @@
 
 ### 현재 상태 (2026-03-19)
 
-- ✅ Phase 1.1 완료: 프로젝트 초기화
-- ✅ Phase 1.2 완료: Message Protocol
-- ✅ Phase 1.4 완료: Claude Adapter
-- 🟡 Phase 2 진행 예정: Multi-Agent Conversation
-- 📦 테스트 26개 통과, Clippy 통과
+- ✅ Phase 1 완료: Core Protocol & CLI
+- ✅ Phase 2.1 완료: Conversation Model
+- ✅ Phase 2.2 완료: MessageRouter
+- 🟡 Phase 2.3 진행 예정: CLI 실제 기능 구현
+- 📦 테스트 41개 통과, Clippy 통과
 
 ### 다음 작업
 
-1. `src/protocol/conversation.rs` - Conversation 모델
-2. `src/router/router.rs` - MessageRouter
-3. `axon send` 실제 기능 구현
+1. `axon send` 실제 기능 구현
+2. `axon converse` 멀티 에이전트 대화
+3. Phase 3: Tool Integration
 
 ### 빌드 & 테스트
 
