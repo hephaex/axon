@@ -23,13 +23,15 @@
   - ToolRegistry, MinKy Adapter
   - Filesystem Tools, Web Tools
   - `axon tool list/add/remove` 구현
-- 🟡 Phase 4 진행 예정: Additional Adapters
-- 📦 테스트 59개 통과, Clippy 통과
+- ✅ Phase 4 완료: Additional Adapters
+  - GeminiAdapter (Google AI), OpenAiAdapter (GPT)
+  - OllamaAdapter (Local LLM)
+- 📦 테스트 76개 통과, Clippy 통과
 
 ### 다음 작업
 
-1. Phase 4: Additional Adapters (Gemini, OpenAI, Ollama)
-2. Phase 5: Advanced Features (Streaming, Persistence)
+1. Phase 5: Advanced Features (Streaming, Persistence)
+2. Phase 5.4: Reliability (Rate limiting, Retry)
 
 ### 빌드 & 테스트
 
