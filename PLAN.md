@@ -75,7 +75,7 @@
 
 ### 3.4 CLI 확장 ✅
 - [x] `axon tool add/list/remove`
-- [ ] `--tools` 옵션으로 대화에 도구 연결 (Phase 4에서 구현)
+- [x] `--tools` 옵션으로 대화에 도구 연결
 
 ---
 
@@ -142,7 +142,7 @@
 ## 다음 작업 (Optional)
 
 1. Shell command 도구 구현 (Phase 3.3)
-2. `--tools` 옵션으로 대화에 도구 연결 (Phase 3.4)
+2. ~~`--tools` 옵션으로 대화에 도구 연결 (Phase 3.4)~~ ✅ 완료
 3. ~~CLI 스트리밍 출력 (`axon send --stream` 옵션)~~ ✅ 완료
 4. 프로덕션 배포 준비 (Docker, 설정 파일)
 

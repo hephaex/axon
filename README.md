@@ -47,6 +47,22 @@ axon send --from user --to claude "Explain quantum computing in simple terms"
 axon send --from user --stream "Write a short poem about coding"
 ```
 
+### Tool-Enabled Messages
+
+```bash
+# Enable file system tools
+axon send --from user --tools read_file,list_dir "List the files in the current directory and read README.md"
+
+# Enable multiple tools including web fetch
+axon send --from user --tools read_file,web_fetch "Summarize the content from https://example.com"
+
+# Enable write operations (sandboxed to base-dir)
+axon send --from user --tools read_file,write_file --allow-write --base-dir ./output "Create a summary file"
+
+# Tools in multi-agent conversations
+axon converse --agents "analyst,critic" --tools read_file,list_dir --topic "Review code in src/"
+```
+
 ### Multi-Agent Conversation
 
 ```bash
@@ -83,8 +99,8 @@ curl -X POST http://localhost:8090/api/send \
 
 | Command | Description |
 |---------|-------------|
-| `axon send` | Send a single message to an agent (supports `--stream`) |
-| `axon converse` | Start multi-agent conversation |
+| `axon send` | Send a single message to an agent (supports `--stream`, `--tools`) |
+| `axon converse` | Start multi-agent conversation (supports `--tools`) |
 | `axon pipe` | Pipeline mode (stdin → agents → stdout) |
 | `axon serve` | Start HTTP/WebSocket server |
 | `axon agent add/list/remove` | Manage agents |
